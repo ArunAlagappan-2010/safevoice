@@ -26,7 +26,7 @@ assert.equal(ruleTriage('Some seniors keep pushing my friend near the canteen.')
 console.log('ok  rule triage');
 
 // --- HTTP flow ---
-const env = { ...process.env, PORT: String(PORT), SAFEVOICE_DATA: data, ANTHROPIC_API_KEY: '' };
+const env = { ...process.env, PORT: String(PORT), SAFEVOICE_DATA: data, ANTHROPIC_API_KEY: '', GEMINI_API_KEY: '', GOOGLE_API_KEY: '' };
 const srv = spawn(process.execPath, [path.join(ROOT, 'server.js')], { env, stdio: ['ignore', 'pipe', 'inherit'] });
 await new Promise((res, rej) => {
   srv.stdout.on('data', (d) => d.toString().includes('SafeVoice is running') && res());

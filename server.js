@@ -8,7 +8,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { Store } from './lib/store.js';
-import { triage, ruleTriage, suggestReply, aiAvailable, TIMES } from './lib/triage.js';
+import { triage, ruleTriage, suggestReply, aiAvailable, aiLabel, TIMES } from './lib/triage.js';
 import { buildSeed } from './lib/seed.js';
 
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
@@ -157,7 +157,7 @@ async function api(req, res, url) {
 
   if (p === '/api/info' && m === 'GET') {
     return send(res, 200, {
-      ai: (await aiAvailable()) ? 'claude' : 'rules',
+      ai: (await aiAvailable()) || 'rules',
       lanUrls: lanUrls(),
       network: networkInfo(),
       locations: LOCATIONS,
@@ -331,7 +331,7 @@ async function api(req, res, url) {
   }
 
   if (p === '/api/settings' && m === 'GET') {
-    return send(res, 200, { ...store.settings, ai: (await aiAvailable()) ? 'claude' : 'rules', lanUrls: lanUrls(), network: networkInfo(), phones: phones.size, total: store.cases.length });
+    return send(res, 200, { ...store.settings, ai: (await aiAvailable()) || 'rules', lanUrls: lanUrls(), network: networkInfo(), phones: phones.size, total: store.cases.length });
   }
   if (p === '/api/settings' && m === 'POST') {
     const b = await readBody(req);
@@ -411,7 +411,7 @@ setInterval(() => {
 process.on('SIGINT', () => { store.flush(); process.exit(0); });
 
 server.listen(PORT, HOST, async () => {
-  const ai = (await aiAvailable()) ? `Claude (${process.env.SAFEVOICE_MODEL || 'claude-opus-5-5'})` : 'built-in rule engine (set ANTHROPIC_API_KEY for Claude)';
+  const ai = (await aiLabel()) || 'built-in rule engine (set GEMINI_API_KEY or ANTHROPIC_API_KEY to use AI)';
   const lan = lanUrls();
   console.log(`
   SafeVoice is running.

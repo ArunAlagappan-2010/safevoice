@@ -138,15 +138,19 @@ cloudflared tunnel --url http://localhost:3000
 
 It prints an `https://….trycloudflare.com` address that anyone can open. Keep that terminal running.
 
-## Turn on Claude
+## Turn on AI (Gemini or Claude)
 
-Without a key, triage runs on a built-in rule engine (English and Tamil keywords, repetition, fear, place history), so the demo works fully offline. To use Claude:
+Without a key, triage runs on a built-in rule engine (English and Tamil keywords, repetition, fear, place history), so the demo works fully offline. To use AI:
 
-1. Copy `.env.example` to `.env`.
-2. Set `ANTHROPIC_API_KEY=...`
-3. Restart the server. The dashboard sidebar shows **AI: Claude**.
+1. Copy `.env.example` to `.env` (or open the existing `.env`).
+2. Add **one** line:
+   - Gemini: `GEMINI_API_KEY=...` (free key from https://aistudio.google.com/apikey). Model `gemini-2.5-flash`; change it with `GEMINI_MODEL=`.
+   - Claude: `ANTHROPIC_API_KEY=...`
+3. Restart the server. The dashboard sidebar shows **AI: Gemini** or **AI: Claude**.
 
-Claude (`claude-opus-5-5`, low effort, structured JSON output) then scores urgency, writes the flags and the first supportive reply in the student's language, and drafts counsellor replies. The rule engine still runs underneath as a **safety floor**: self-harm, weapons and sexual abuse are always urgent, whatever the model says. If the API is unreachable, SafeVoice falls back to the rules automatically.
+If both keys are set, Gemini is used; set `SAFEVOICE_AI=claude` to prefer Claude.
+
+The AI (structured JSON output) then scores urgency, writes the flags and the first supportive reply in the student's language, and drafts counsellor replies. The rule engine still runs underneath as a **safety floor**: self-harm, weapons and sexual abuse are always urgent, whatever the model says. If the API is unreachable, SafeVoice falls back to the rules automatically.
 
 ## What's in it
 
@@ -160,7 +164,7 @@ Claude (`claude-opus-5-5`, low effort, structured JSON output) then scores urgen
 
 ```
 server.js          HTTP server + API + live updates (Server-Sent Events)
-lib/triage.js      Claude triage + rule engine + safety floor
+lib/triage.js      Gemini / Claude triage + rule engine + safety floor
 lib/store.js       JSON file store, case codes, retention purge
 lib/seed.js        Fictional demo data
 public/            Student app (installable), counsellor dashboard, presenter view, pitch, /join poster
@@ -172,6 +176,8 @@ test/smoke.js      End-to-end test:  npm test
 
 | Variable | Default | |
 |---|---|---|
+| `GEMINI_API_KEY` | (unset) | Turns on Gemini |
+| `GEMINI_MODEL` | `gemini-2.5-flash` | |
 | `ANTHROPIC_API_KEY` | (unset) | Turns on Claude |
 | `COUNSELLOR_PIN` | `2468` | Dashboard PIN |
 | `PORT` | `3000` | |

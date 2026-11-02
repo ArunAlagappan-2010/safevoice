@@ -2,6 +2,7 @@
   const $ = (s, el = document) => el.querySelector(s);
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+  const AI_NAME = { gemini: 'Gemini', claude: 'Claude' };
   const ABOUT = { me: 'About themself', friend: 'About a friend', saw: 'Something they saw' };
 
   let token = '';
@@ -223,7 +224,7 @@
     box.innerHTML = `
       <div class="detail-head"><span class="mono">${esc(c.code)}</span>${statusTag}${c.helpNow ? '<span class="tag l4">Asked for help now</span>' : ''}</div>
       <div class="triage${u >= 4 ? ' hot' : ''}">
-        <p class="eyebrow"><span>AI triage</span><span class="dim">${c.triage.source === 'claude' ? 'Claude' : 'Rule engine'}</span></p>
+        <p class="eyebrow"><span>AI triage</span><span class="dim">${AI_NAME[c.triage.source] || 'Rule engine'}</span></p>
         <div class="meter" aria-hidden="true">${[1, 2, 3, 4, 5].map((i) => `<i class="${i <= u ? 'on' : ''}"></i>`).join('')}</div>
         <p class="urg">Urgency ${u}/5 · <em>${LEVEL(u)}</em></p>
         <p class="summary">${esc(c.triage.summary)}</p>
@@ -336,8 +337,8 @@
   async function loadInfo() {
     const s = await api('/api/settings');
     const pill = $('#aiPill');
-    pill.textContent = s.ai === 'claude' ? 'AI: Claude' : 'AI: rule engine';
-    pill.classList.toggle('claude', s.ai === 'claude');
+    pill.textContent = `AI: ${AI_NAME[s.ai] || 'rule engine'}`;
+    pill.classList.toggle('claude', s.ai in AI_NAME);
     const n = s.network;
     $('#netName').textContent = n.hotspot && n.ssid ? `Wi-Fi: ${n.ssid}` : n.urls[0] ? n.urls[0].replace('http://', '') : 'This computer only';
     return s;
@@ -346,10 +347,11 @@
 
   async function loadSettings() {
     const s = await loadInfo();
-    $('#aiTitle').textContent = s.ai === 'claude' ? 'Claude is triaging reports' : 'Built-in rule engine';
-    $('#aiDesc').textContent = s.ai === 'claude'
-      ? 'Each report is read by Claude, which scores urgency, flags risk signals and writes a supportive first reply. A safety floor of hard rules (self-harm, weapons, abuse) always applies on top.'
-      : 'Reports are scored by a transparent keyword engine in English and Tamil. Set ANTHROPIC_API_KEY on the server to switch on Claude.';
+    const name = AI_NAME[s.ai];
+    $('#aiTitle').textContent = name ? `${name} is triaging reports` : 'Built-in rule engine';
+    $('#aiDesc').textContent = name
+      ? `Each report is read by ${name}, which scores urgency, flags risk signals and writes a supportive first reply. A safety floor of hard rules (self-harm, weapons, abuse) always applies on top.`
+      : 'Reports are scored by a transparent keyword engine in English and Tamil. Set GEMINI_API_KEY (or ANTHROPIC_API_KEY) on the server to switch on AI.';
     $('#retention').value = String(s.retentionDays);
     $('#totalCases').textContent = `${s.total} reports stored right now.`;
     const n = s.network;
