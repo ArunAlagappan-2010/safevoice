@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SafeVoice · Connect your phone</title>
+  <link rel="icon" href="/logo.svg">
+  <link rel="stylesheet" href="/base.css">
+  <style>
+    body { min-height: 100vh; padding: 32px 16px; }
+    .poster { max-width: 980px; margin: 0 auto; }
+    .head { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--line); padding-bottom: 12px; }
+    h1 { font-family: var(--serif); font-size: clamp(40px, 7vw, 72px); line-height: 1.02; margin: 28px 0 8px; }
+    .ta { font-size: 18px; color: var(--muted); margin: 0 0 28px; }
+    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+    .step { background: var(--surface); border: 0; box-shadow: var(--shadow); border-radius: 22px; padding: 22px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; }
+    .num { font-family: var(--serif); font-style: italic; color: var(--teal); font-size: 40px; line-height: 1; }
+    .step h2 { font-family: var(--serif); font-size: 28px; margin: 0; }
+    .step p { margin: 0; color: var(--muted); }
+    .qr { background: #fff; border-radius: 12px; padding: 8px; line-height: 0; }
+    .big { font-family: var(--mono); font-weight: 700; font-size: 17px; color: var(--ink); background: var(--bg-2); border-radius: 8px; padding: 6px 10px; white-space: nowrap; }
+    .kv { display: grid; grid-template-columns: auto auto; gap: 6px 12px; align-items: center; justify-content: center; }
+    .kv span { font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); text-align: right; }
+    .foot { margin-top: 24px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: 13px; }
+    .pill { background: var(--teal-soft); color: var(--teal-2); font-weight: 600; padding: 7px 12px; border-radius: 999px; }
+    .warn { background: var(--lav-soft); color: var(--lav-2); border-radius: 10px; padding: 12px 14px; margin-bottom: 20px; font-size: 14px; }
+    @media print { body { padding: 0; } .noprint { display: none; } }
+  </style>
+</head>
+<body>
+  <div class="poster">
+    <div class="head">
+      <span class="brand"><img src="/logo.svg" alt="" width="22" height="22"> Safe<em>Voice</em></span>
+      <button class="noprint" onclick="print()" style="border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 14px;font-weight:600">Print poster</button>
+    </div>
+    <h1>Something wrong at school? <span class="accent">Say it safely.</span></h1>
+    <p class="ta">பள்ளியில் ஏதாவது தவறாக நடக்கிறதா? பாதுகாப்பாகச் சொல்லுங்கள்.</p>
+    <p class="warn noprint" id="noWifi" hidden>The SafeVoice Wi-Fi isn't set up yet. Run <b>Start SafeVoice.bat</b> to create it. Until then, phones on the same Wi-Fi as this laptop can use step 2.</p>
+    <div class="steps">
+      <div class="step" id="wifiStep">
+        <span class="num">1</span>
+        <h2>Join the Wi-Fi</h2>
+        <p>Scan with your camera, or pick it in Wi-Fi settings.<br>Wi-Fi-யுடன் இணையுங்கள்</p>
+        <div class="qr" id="wifiQr"></div>
+        <div class="kv"><span>Wi-Fi</span><b class="big" id="ssid">—</b><span>Password</span><b class="big" id="pass">—</b></div>
+      </div>
+      <div class="step">
+        <span class="num">2</span>
+        <h2>Open SafeVoice</h2>
+        <p>Scan, or type this address in your browser.<br>இந்த முகவரியைத் திறக்கவும்</p>
+        <div class="qr" id="appQr"></div>
+        <b class="big" id="url">—</b>
+      </div>
+      <div class="step">
+        <span class="num">3</span>
+        <h2>Keep it on your phone</h2>
+        <p>In the browser menu, tap <b>Add to Home screen</b>. SafeVoice then opens like an app.<br>முகப்புத் திரையில் சேர்க்கவும்</p>
+        <p><b>Android app:</b> on the SafeVoice home page tap <b>Download the Android app</b>, or open</p>
+        <b class="big" id="apk" style="white-space:normal;word-break:break-all;font-size:14px">—/download/SafeVoice.apk</b>
+        <p style="margin-top:auto"><b>No name. No login. No IP logged.</b><br>பெயர் இல்லை · உள்நுழைவு இல்லை</p>
+      </div>
+    </div>
+    <div class="foot">
+      <span class="pill">In danger now? Call 112 · Childline 1098 · Tele-MANAS 14416</span>
+      <span class="muted">Reports are read by the school counsellor.</span>
+    </div>
+  </div>
+  <script src="/vendor/qrcode.js"></script>
+  <script src="/qr.js"></script>
+  <script>
+    fetch('/api/info').then((r) => r.json()).then(({ network: n }) => {
+      document.getElementById('url').textContent = n.studentUrl.replace(/^http:\/\//, '');
+      document.getElementById('apk').textContent = n.studentUrl.replace(/^http:\/\//, '') + 'download/SafeVoice.apk';
+      SVQR.renderQR(document.getElementById('appQr'), n.studentUrl, { size: 190 });
+      if (n.ssid) {
+        document.getElementById('ssid').textContent = n.ssid;
+        document.getElementById('pass').textContent = n.password;
+        SVQR.renderQR(document.getElementById('wifiQr'), SVQR.wifiText(n.ssid, n.password), { size: 190 });
+      } else {
+        document.getElementById('wifiStep').style.opacity = 0.5;
+        document.getElementById('noWifi').hidden = false;
+      }
+    });
+  </script>
+</body>
+</html>

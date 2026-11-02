@@ -1,0 +1,7 @@
+node_modules/
+data/
+.env
+android/tools/
+android/build/
+android/safevoice.keystore
+.playwright-mcp/

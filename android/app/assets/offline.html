@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SafeVoice</title>
+  <style>
+    :root { --bg: #f3f6f4; --ink: #1f3340; --muted: #5b707d; --line: #d6e1dd; --teal: #2a7c76; --teal-2: #1f625d; --teal-soft: #dcefea; --lav: #7467bd; --lav-2: #5c50a3; --lav-soft: #ece9f8; --sun-soft: #f8efd2; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans Tamil', sans-serif; color: var(--ink); line-height: 1.5;
+      background: radial-gradient(120% 60% at 100% 0%, var(--lav-soft), transparent 55%), radial-gradient(90% 50% at 0% 100%, var(--teal-soft), transparent 60%), var(--bg); min-height: 100vh; }
+    main { max-width: 460px; margin: 0 auto; padding: 22px 20px 32px; display: flex; flex-direction: column; gap: 16px; }
+    .brand { display: flex; align-items: center; gap: 8px; font-family: Georgia, serif; font-weight: 700; font-size: 18px; }
+    .brand em { color: var(--teal); }
+    h1 { font-family: Georgia, serif; font-size: 32px; line-height: 1.1; margin: 8px 0 0; }
+    p { margin: 0; }
+    .muted { color: var(--muted); }
+    .status { display: flex; align-items: center; gap: 10px; background: #fff; border-radius: 16px; padding: 14px 16px; box-shadow: 0 10px 28px -14px rgba(31,51,64,.22); font-weight: 600; }
+    .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--lav); animation: pulse 1.4s ease-in-out infinite; flex: none; }
+    @keyframes pulse { 50% { box-shadow: 0 0 0 8px rgba(116,103,189,.18); } }
+    ol { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    li { display: flex; gap: 12px; align-items: flex-start; background: #fff; border-radius: 16px; padding: 12px 14px; }
+    li i { font-style: normal; flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 13px; background: var(--teal-soft); color: var(--teal-2); }
+    code { font-family: ui-monospace, monospace; font-weight: 700; background: var(--teal-soft); color: var(--teal-2); padding: 1px 6px; border-radius: 6px; }
+    .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin-top: 6px; }
+    .lines { display: flex; flex-direction: column; gap: 8px; }
+    .lines a { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 2px 12px; background: #fff; border-radius: 16px; padding: 12px 14px; color: inherit; text-decoration: none; }
+    .lines b { font-size: 14px; }
+    .lines small { color: var(--muted); font-size: 13px; }
+    .lines span { grid-column: 2; grid-row: 1 / 3; font-family: Georgia, serif; font-weight: 700; font-size: 28px; color: var(--teal-2); background: var(--teal-soft); border-radius: 12px; padding: 6px 12px; }
+    button { font: inherit; border: 0; border-radius: 14px; padding: 14px 16px; font-weight: 600; font-size: 16px; cursor: pointer; }
+    .primary { background: var(--teal); color: #fff; }
+    details { background: #fff; border-radius: 16px; padding: 0 14px; }
+    summary { padding: 12px 0; font-weight: 600; color: var(--teal-2); cursor: pointer; }
+    .addr { display: flex; gap: 8px; padding-bottom: 14px; }
+    input { flex: 1; min-width: 0; font: inherit; border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; }
+    .addr button { padding: 10px 14px; font-size: 14px; }
+    .note { background: var(--sun-soft); border-radius: 14px; padding: 12px 14px; font-size: 14px; color: #5d5233; }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="brand">
+      <svg width="24" height="24" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3a958e"/><stop offset="1" stop-color="#7467bd"/></linearGradient></defs><path d="M32 4 8 12.5V30c0 15.2 10.1 25.9 24 29.5C45.9 55.9 56 45.2 56 30V12.5L32 4Z" fill="url(#g)"/><path d="M19 24.5a5 5 0 0 1 5-5h16a5 5 0 0 1 5 5v9a5 5 0 0 1-5 5h-8.5l-6.5 5.5v-5.5h-1a5 5 0 0 1-5-5v-9Z" fill="#fff"/></svg>
+      <span>Safe<em>Voice</em></span>
+    </div>
+
+    <h1>Connecting to your school…</h1>
+    <p class="muted">SafeVoice works on the school's own Wi-Fi. No internet needed.<br>பள்ளியின் SafeVoice Wi-Fi-யுடன் இணையுங்கள்.</p>
+
+    <div class="status"><span class="dot"></span><span>Looking for SafeVoice. This opens by itself once you're connected.</span></div>
+
+    <ol>
+      <li><i>1</i><span>Open your phone's <b>Wi-Fi settings</b> and join <code>SafeVoice</code>. The password is on the poster near the counsellor's room.</span></li>
+      <li><i>2</i><span>If the phone says <b>"No internet"</b>, choose <b>Stay connected</b> / <b>Keep Wi-Fi</b>.</span></li>
+      <li><i>3</i><span>Come back here. SafeVoice opens on its own.</span></li>
+    </ol>
+
+    <button class="primary" type="button" onclick="SafeVoiceApp.retry()">Try again now</button>
+
+    <p class="eyebrow">Need help right now? · இப்போதே உதவி</p>
+    <div class="lines">
+      <a href="tel:14416"><b>Tele-MANAS</b><small>Free mental health support, 24×7</small><span>14416</span></a>
+      <a href="tel:1098"><b>Childline</b><small>Free helpline for children, 24×7</small><span>1098</span></a>
+      <a href="tel:112"><b>Emergency</b><small>If you are in immediate danger</small><span>112</span></a>
+    </div>
+
+    <p class="note">You are not alone. Talking to a teacher you trust is always okay too.</p>
+
+    <details>
+      <summary>School uses a different Wi-Fi? Set the SafeVoice address</summary>
+      <div class="addr">
+        <input id="addr" inputmode="url" autocapitalize="off" spellcheck="false" placeholder="192.168.1.20:3000">
+        <button class="primary" type="button" onclick="SafeVoiceApp.setServer(document.getElementById('addr').value)">Save</button>
+      </div>
+    </details>
+  </main>
+  <script>
+    try { document.getElementById('addr').value = SafeVoiceApp.server().replace(/^http:\/\//, '').replace(/\/$/, ''); } catch (e) {}
+  </script>
+</body>
+</html>

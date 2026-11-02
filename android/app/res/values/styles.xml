@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="SafeVoiceTheme" parent="@android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/mist</item>
+        <item name="android:statusBarColor">@color/teal</item>
+        <item name="android:navigationBarColor">@color/teal</item>
+        <item name="android:colorAccent">@color/teal</item>
+        <item name="android:colorPrimary">@color/teal</item>
+        <item name="android:colorPrimaryDark">@color/mist</item>
+    </style>
+    <color name="mist">#F3F6F4</color>
+    <color name="teal">#2A7C76</color>
+</resources>

@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f3f6f4">
+  <meta name="referrer" content="no-referrer">
+  <title>SafeVoice</title>
+  <link rel="icon" href="/logo.svg">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="SafeVoice">
+  <link rel="stylesheet" href="/base.css">
+  <link rel="stylesheet" href="/student.css">
+</head>
+<body>
+  <div class="app" id="app">
+    <header class="top">
+      <a class="brand" href="/" data-go="home" aria-label="SafeVoice home">
+        <img src="/logo.svg" alt="" width="24" height="24"> Safe<em>Voice</em>
+      </a>
+      <div class="top-actions">
+        <span class="conn" id="conn" role="status"><i></i><span id="connLabel"></span></span>
+        <button class="lang" id="langBtn" type="button" aria-label="Switch language">தமிழ்</button>
+        <button class="exit" id="exitBtn" type="button" title="Leaves SafeVoice straight away (Esc)">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4M9 8l-4 4 4 4M5 12h11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span data-t="exit">Quick exit</span>
+        </button>
+      </div>
+    </header>
+
+    <div class="banner" id="offlineBanner" hidden></div>
+    <div class="banner ok" id="deliveredBanner" hidden></div>
+
+    <!-- HOME -->
+    <section class="screen" data-screen="home">
+      <div class="hero">
+        <p class="eyebrow muted" data-t="eyebrow">Anonymous · Safe · Heard</p>
+        <h1 class="serif"><span data-t="h1a">Say what</span><br><span class="accent" data-t="h1b">happened.</span></h1>
+        <p class="lede" data-t="lede">Tell us about bullying, harassment or anything that makes school feel unsafe. A counsellor reads every report and replies.</p>
+      </div>
+      <p class="reassure">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.4-7-10.2A4.3 4.3 0 0 1 12 8a4.3 4.3 0 0 1 7 2.8C19 16.6 12 21 12 21Z" fill="currentColor"/></svg>
+        <span data-t="reassure">You won't get in trouble for telling. Reporting for a friend is okay too.</span>
+      </p>
+      <div class="stack">
+        <button class="btn primary big" data-go="report" data-t="btnReport">Report something</button>
+        <button class="btn soft big" data-go="check" data-t="btnCheck">Check your case</button>
+        <button class="btn calm big" data-go="help" data-t="btnHelp">I need help right now</button>
+      </div>
+
+      <div class="how">
+        <p class="eyebrow muted" data-t="howTitle">What happens next</p>
+        <ol>
+          <li><i>1</i><span data-t="how1">You write what happened. No name needed.</span></li>
+          <li><i>2</i><span data-t="how2">Only the school counsellor reads it.</span></li>
+          <li><i>3</i><span data-t="how3">You get a reply here with your private code, usually within one school day.</span></li>
+        </ol>
+      </div>
+
+      <ul class="promises">
+        <li><span class="ico teal"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 8a7 7 0 0 1 14 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M4 4l16 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><div><b data-t="p1a">No name.</b> <span data-t="p1b">We never ask who you are.</span></div></li>
+        <li><span class="ico lav"><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/></svg></span><div><b data-t="p2a">No login.</b> <span data-t="p2b">Just a private case code.</span></div></li>
+        <li><span class="ico sky"><svg viewBox="0 0 24 24"><path d="M5 7h14M10 7V5h4v2M7 7l1 13h8l1-13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><b data-t="p3a">Deleted on schedule.</b> <span data-t="p3b">Reports are not kept forever.</span></div></li>
+      </ul>
+
+      <div class="install" id="installCard" hidden>
+        <div>
+          <b data-t="installTitle">Keep SafeVoice on your phone</b>
+          <span id="installHow" data-t="installHow">Browser menu ⋮ → Add to Home screen</span>
+          <a id="apkLink" href="/download/SafeVoice.apk" hidden data-t="apkLink">Or download the Android app</a>
+        </div>
+        <button class="btn primary" id="installBtn" type="button" hidden data-t="installBtn">Install</button>
+        <button class="x" id="installClose" type="button" aria-label="Close">×</button>
+      </div>
+      <p class="pill-note" data-t="privacy">No name · No login · No IP logged</p>
+    </section>
+
+    <!-- QUEUED (offline) -->
+    <section class="screen center" data-screen="queued" hidden>
+      <div class="check wait" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.4"/></svg></div>
+      <h2 class="serif title" data-t="queuedTitle">Saved on this phone</h2>
+      <p class="lede" data-t="queuedBody">You're not connected to SafeVoice right now. Your report is safe here and will send by itself as soon as you're back on the school Wi-Fi. Keep this page open.</p>
+      <button class="btn link" data-go="home" data-t="done">Done</button>
+    </section>
+
+    <!-- REPORT -->
+    <section class="screen" data-screen="report" hidden>
+      <div class="row-between">
+        <h2 class="serif title" data-t="newReport">New report</h2>
+        <span class="badge teal">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2.5" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M8 10V7a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2.4"/></svg>
+          <span data-t="anonymous">Anonymous</span>
+        </span>
+      </div>
+      <form id="reportForm" novalidate>
+        <p class="label eyebrow"><span data-t="about">Who is this about?</span> <small data-t="optional">optional</small></p>
+        <div class="chips" id="aboutChips" role="radiogroup"></div>
+
+        <div class="label-row">
+          <label class="label eyebrow" for="text" data-t="whatHappened">What happened?</label>
+          <button type="button" class="clear" id="clearBtn" data-t="clear">Clear</button>
+        </div>
+        <div class="textarea-wrap">
+          <textarea id="text" rows="6" maxlength="4000" required data-tp="placeholder" placeholder="Write it in your own words. You don't need to give any names."></textarea>
+          <button type="button" class="mic" id="micBtn" hidden aria-pressed="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-2.08A7 7 0 0 0 19 12h-2Z" fill="currentColor"/></svg>
+            <span id="micLabel" data-t="speak">Speak</span>
+          </button>
+        </div>
+        <p class="field-hint" data-t="noNames">No names needed. You can stop any time.</p>
+
+        <p class="label eyebrow"><span data-t="where">Where?</span> <small data-t="optional">optional</small></p>
+        <div class="chips" id="whereChips" role="radiogroup"></div>
+
+        <p class="label eyebrow"><span data-t="when">When?</span> <small data-t="optional">optional</small></p>
+        <div class="chips" id="whenChips" role="radiogroup"></div>
+
+        <label class="toggle">
+          <span>
+            <b data-t="helpNowToggle">I need help right now</b>
+            <small data-t="helpNowHint">A counsellor is alerted straight away.</small>
+          </span>
+          <input type="checkbox" id="helpNow">
+          <span class="switch" aria-hidden="true"></span>
+        </label>
+
+        <details class="who-sees">
+          <summary data-t="whoSees">Who can see this?</summary>
+          <p data-t="whoSeesBody">Only your school counsellor. We don't store your name, phone number or IP address, and reports are deleted on a schedule.</p>
+        </details>
+
+        <p class="error" id="reportError" role="alert" hidden></p>
+        <button class="btn primary big" type="submit" id="submitBtn" data-t="submit">Submit anonymously</button>
+        <button class="btn link" type="button" data-go="home" data-t="back">Back</button>
+      </form>
+    </section>
+
+    <!-- SENT -->
+    <section class="screen center" data-screen="sent" hidden>
+      <div class="check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <h2 class="serif title" data-t="sent">Report sent</h2>
+      <p class="thanks" data-t="thanks">Thank you for speaking up. That took courage.</p>
+      <p class="eyebrow muted small" data-t="yourCode">Your private case code</p>
+      <button class="code mono" id="codeBtn" type="button" aria-describedby="codeHint"></button>
+      <p class="hint" id="codeHint" data-t="saveCode">Save this code. It is the only way to check replies.</p>
+      <div class="reply-card">
+        <p class="eyebrow" data-t="supportive">SafeVoice · Supportive reply</p>
+        <p id="replyText" class="reply-text" aria-live="polite"></p>
+      </div>
+      <div class="stack">
+        <button class="btn primary big" id="sentHelpBtn" data-go="help" hidden data-t="getHelp">See helplines now</button>
+        <button class="btn soft" data-go="thread" data-t="openCase">Open my case</button>
+        <button class="btn link" data-go="home" data-t="done">Done</button>
+      </div>
+      <p class="pill-note" data-t="privacy">No name · No login · No IP logged</p>
+    </section>
+
+    <!-- HELP -->
+    <section class="screen" data-screen="help" hidden>
+      <h2 class="serif title big-title" data-t="notAlone">You are not alone.</h2>
+      <p class="lede" data-t="supportAvail">Support is available right now, any time of day.</p>
+      <div class="helplines" id="helplines"></div>
+
+      <div class="breathe" id="breathe">
+        <div class="breathe-ring" aria-hidden="true"><span></span></div>
+        <div class="breathe-copy">
+          <b data-t="breatheTitle">Take a slow breath with me</b>
+          <span id="breatheCue" aria-live="polite"></span>
+          <button type="button" class="btn soft" id="breatheBtn" data-t="breatheStart">Start breathing</button>
+        </div>
+      </div>
+
+      <div class="stack">
+        <button class="btn primary big" id="talkBtn" data-t="talkCounsellor">Talk to a counsellor</button>
+        <button class="btn link" data-go="home" data-t="back">Back</button>
+      </div>
+    </section>
+
+    <!-- CHECK -->
+    <section class="screen" data-screen="check" hidden>
+      <h2 class="serif title" data-t="checkTitle">Check your case</h2>
+      <form id="checkForm" novalidate>
+        <label class="label eyebrow" for="codeInput" data-t="caseCode">Case code</label>
+        <input id="codeInput" class="input mono" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="SV-XXXX-XXX" maxlength="14">
+        <p class="error" id="checkError" role="alert" hidden></p>
+        <button class="btn primary big" type="submit" data-t="viewReply">View reply</button>
+        <button class="btn link" type="button" data-go="home" data-t="back">Back</button>
+      </form>
+    </section>
+
+    <!-- THREAD -->
+    <section class="screen" data-screen="thread" hidden>
+      <div class="row-between">
+        <div>
+          <p class="eyebrow muted small" data-t="caseCode">Case code</p>
+          <p class="mono thread-code" id="threadCode"></p>
+        </div>
+        <span class="badge" id="threadStatus"></span>
+      </div>
+      <div class="thread" id="thread" aria-live="polite"></div>
+      <form id="msgForm" class="msg-form" novalidate>
+        <textarea id="msgText" rows="2" maxlength="4000" data-tp="addMessage" placeholder="Add something or reply…"></textarea>
+        <button class="btn primary" type="submit" data-t="sendMsg">Send</button>
+      </form>
+      <p class="error" id="msgError" role="alert" hidden></p>
+      <button class="btn link" data-go="home" data-t="back">Back</button>
+    </section>
+
+    <div class="toast" id="toast" role="status" hidden></div>
+  </div>
+  <script src="/student.js"></script>
+</body>
+</html>

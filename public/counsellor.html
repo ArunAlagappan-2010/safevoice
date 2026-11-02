@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>SafeVoice · Counsellor</title>
+  <link rel="icon" href="/logo.svg">
+  <link rel="stylesheet" href="/base.css">
+  <link rel="stylesheet" href="/counsellor.css">
+</head>
+<body>
+  <!-- LOGIN -->
+  <main class="login" id="login" hidden>
+    <form class="login-card" id="loginForm" novalidate>
+      <span class="brand"><img src="/logo.svg" alt="" width="22" height="22"> Safe<em>Voice</em></span>
+      <h1 class="serif">Counsellor <span class="accent">login</span></h1>
+      <p class="muted">One login per school. Students never need an account.</p>
+      <label class="eyebrow" for="pin">PIN</label>
+      <input id="pin" type="password" inputmode="numeric" autocomplete="current-password" maxlength="12" autofocus>
+      <p class="err" id="loginErr" role="alert" hidden></p>
+      <button class="btn primary" type="submit">Open dashboard</button>
+      <p class="demo-note">Demo PIN: <b class="mono">2468</b></p>
+    </form>
+  </main>
+
+  <!-- APP -->
+  <div class="shell" id="shell" hidden>
+    <aside class="side">
+      <span class="brand on-dark"><img src="/logo.svg" alt="" width="22" height="22"> Safe<em>Voice</em></span>
+      <nav class="nav" aria-label="Sections">
+        <button data-view="cases" class="active">Cases <span class="count" id="navCount"></span></button>
+        <button data-view="hotspots">Hotspots</button>
+        <button data-view="settings">Settings</button>
+      </nav>
+      <div class="side-foot">
+        <div class="net" id="net" title="Phones with SafeVoice open right now">
+          <span class="net-dot" id="netDot"></span>
+          <span><b id="phoneCount">0</b> phones connected<br><small id="netName">Local network</small></span>
+        </div>
+        <span class="ai-pill" id="aiPill">AI triage</span>
+        <p>Counsellor view<br>Names are never shown</p>
+        <button class="linkish" id="logoutBtn">Log out</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="alert" id="alert" role="alert" hidden></div>
+
+      <!-- CASES -->
+      <section class="view" data-view="cases">
+        <header class="view-head">
+          <div>
+            <h1 class="serif">Cases</h1>
+            <p class="eyebrow dim">Sorted by urgency</p>
+          </div>
+          <div class="seg" role="tablist" aria-label="Filter cases">
+            <button data-filter="open" class="active" role="tab">Open</button>
+            <button data-filter="resolved" role="tab">Resolved</button>
+            <button data-filter="all" role="tab">All</button>
+          </div>
+        </header>
+        <div class="cases-grid">
+          <div class="case-list" id="caseList" role="list"></div>
+          <article class="detail" id="detail" aria-live="polite"></article>
+        </div>
+      </section>
+
+      <!-- HOTSPOTS -->
+      <section class="view" data-view="hotspots" hidden>
+        <header class="view-head">
+          <div>
+            <h1 class="serif">Hotspots</h1>
+            <p class="eyebrow dim" id="hotSub">Last 3 weeks</p>
+          </div>
+          <div class="seg" role="tablist" aria-label="Time range">
+            <button data-days="7" role="tab">7 days</button>
+            <button data-days="21" class="active" role="tab">3 weeks</button>
+            <button data-days="90" role="tab">90 days</button>
+          </div>
+        </header>
+        <div class="hot-grid">
+          <div class="map-wrap">
+            <div class="map" id="map"></div>
+            <div class="map-extra" id="mapExtra"></div>
+          </div>
+          <div class="panel chart-panel">
+            <h2 class="serif">Incidents by time of day</h2>
+            <div class="bars" id="timeBars"></div>
+          </div>
+          <div class="patterns" id="patterns"></div>
+          <div class="panel">
+            <h2 class="serif">By type</h2>
+            <div id="catBars" class="cat-bars"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SETTINGS -->
+      <section class="view" data-view="settings" hidden>
+        <header class="view-head">
+          <div>
+            <h1 class="serif">Settings</h1>
+            <p class="eyebrow dim">Privacy · Safety · Scale</p>
+          </div>
+        </header>
+        <div class="settings-grid">
+          <div class="panel wide">
+            <p class="eyebrow tint">Local network</p>
+            <h2 class="serif">Connect phones</h2>
+            <p class="dim" id="netDesc">No internet needed. Phones join this laptop's Wi-Fi, then open SafeVoice.</p>
+            <div class="connect-row">
+              <div class="connect-step" id="wifiBox">
+                <span class="step-n">1</span>
+                <div id="wifiQr" class="qr"></div>
+                <div><b>Join the Wi-Fi</b><div class="kv"><span>Name</span><code id="ssid">—</code><span>Password</span><code id="wpass">—</code></div></div>
+              </div>
+              <div class="connect-step">
+                <span class="step-n">2</span>
+                <div id="qr" class="qr"></div>
+                <div><b>Open SafeVoice</b><div id="links" class="links"></div></div>
+              </div>
+            </div>
+            <div class="inline">
+              <a class="btn ghost" href="/join" target="_blank" rel="noopener">Open poster for projector / print</a>
+            </div>
+          </div>
+          <div class="panel">
+            <p class="eyebrow tint">AI triage</p>
+            <h2 class="serif" id="aiTitle">—</h2>
+            <p class="dim" id="aiDesc"></p>
+            <p class="dim small">AI prioritises. A counsellor decides. Every urgency can be overridden.</p>
+          </div>
+          <div class="panel">
+            <p class="eyebrow tint">Deleted on schedule</p>
+            <h2 class="serif">Data retention</h2>
+            <label class="dim" for="retention">Delete reports automatically after</label>
+            <div class="inline">
+              <select id="retention">
+                <option value="30">30 days</option><option value="60">60 days</option><option value="90">90 days</option>
+                <option value="180">180 days</option><option value="365">1 year</option>
+              </select>
+              <button class="btn ghost" id="saveRetention">Save</button>
+            </div>
+            <p class="dim small" id="totalCases"></p>
+          </div>
+          <div class="panel">
+            <p class="eyebrow tint">Demo</p>
+            <h2 class="serif">Demo data</h2>
+            <p class="dim">All demo data is fictional.</p>
+            <div class="inline">
+              <button class="btn ghost" id="resetDemo">Reset demo data</button>
+              <button class="btn danger" id="clearAll">Delete all reports</button>
+            </div>
+          </div>
+          <div class="panel wide">
+            <p class="eyebrow tint">Built to protect students</p>
+            <ul class="promises">
+              <li><b>Anonymous by design.</b> No names. No IP addresses. No login for students.</li>
+              <li><b>Deleted on schedule.</b> Reports are not kept forever.</li>
+              <li><b>Human in the loop.</b> AI prioritises. A counsellor decides.</li>
+              <li><b>Any school can adopt.</b> One counsellor login. No hardware.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="/vendor/qrcode.js" defer></script>
+  <script src="/qr.js" defer></script>
+  <script src="/counsellor.js" defer></script>
+</body>
+</html>

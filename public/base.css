@@ -1,0 +1,74 @@
+/* Fonts ship with the app so it works on a school network with no internet. */
+@font-face { font-family: 'Inter'; font-weight: 400; font-display: swap; src: url('/fonts/inter-latin-400-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Inter'; font-weight: 500; font-display: swap; src: url('/fonts/inter-latin-500-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Inter'; font-weight: 600; font-display: swap; src: url('/fonts/inter-latin-600-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Inter'; font-weight: 700; font-display: swap; src: url('/fonts/inter-latin-700-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Source Serif 4'; font-weight: 600; font-display: swap; src: url('/fonts/source-serif-4-latin-600-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Source Serif 4'; font-weight: 700; font-display: swap; src: url('/fonts/source-serif-4-latin-700-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Source Serif 4'; font-weight: 600; font-style: italic; font-display: swap; src: url('/fonts/source-serif-4-latin-600-italic.woff2') format('woff2'); }
+@font-face { font-family: 'Source Serif 4'; font-weight: 700; font-style: italic; font-display: swap; src: url('/fonts/source-serif-4-latin-700-italic.woff2') format('woff2'); }
+@font-face { font-family: 'JetBrains Mono'; font-weight: 500; font-display: swap; src: url('/fonts/jetbrains-mono-latin-500-normal.woff2') format('woff2'); }
+@font-face { font-family: 'JetBrains Mono'; font-weight: 700; font-display: swap; src: url('/fonts/jetbrains-mono-latin-700-normal.woff2') format('woff2'); }
+
+/* "Lagoon Dawn": muted teal and lavender on a cool mist background.
+   Low saturation, no pure black, and no alarm colours in front of students
+   (rose is kept for the counsellor's urgent cases only). */
+:root {
+  --bg: #f3f6f4;
+  --bg-2: #e6eeea;
+  --surface: #ffffff;
+  --ink: #1f3340;
+  --ink-2: #2e4756;
+  --muted: #5b707d;
+  --line: #d6e1dd;
+  --teal: #2a7c76;
+  --teal-2: #1f625d;
+  --teal-soft: #dcefea;
+  --lav: #7467bd;
+  --lav-2: #5c50a3;
+  --lav-soft: #ece9f8;
+  --sky-soft: #e1edf7;
+  --sun-soft: #f8efd2;
+  --rose: #b4466a;
+  --rose-2: #963755;
+  --rose-soft: #f7e3ea;
+  --shadow: 0 1px 2px rgba(31, 51, 64, 0.06), 0 10px 28px -14px rgba(31, 51, 64, 0.22);
+  --serif: 'Source Serif 4', 'Iowan Old Style', Georgia, 'Times New Roman', serif;
+  --sans: 'Inter', system-ui, -apple-system, 'Segoe UI', 'Noto Sans Tamil', 'Latha', sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
+  --radius: 16px;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { margin: 0; }
+body {
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+}
+button, input, textarea, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 3px solid var(--lav); outline-offset: 2px; }
+
+.serif { font-family: var(--serif); }
+.accent { color: var(--teal); font-style: italic; }
+.eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.mono { font-family: var(--mono); letter-spacing: 0.04em; }
+
+.brand { display: inline-flex; align-items: center; font-family: var(--serif); font-weight: 700; font-size: 18px; text-decoration: none; color: inherit; white-space: nowrap; }
+.brand em { color: var(--teal); font-style: italic; }
+.brand img, .brand svg { width: 24px; height: 24px; flex: none; margin-right: 8px; }
+
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

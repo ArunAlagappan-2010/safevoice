@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SafeVoice · Pitch</title>
+  <link rel="icon" href="/logo.svg">
+  <link rel="stylesheet" href="/base.css">
+  <style>
+    body { background: linear-gradient(160deg, #1d4a4c, #2b3f63); color: #fff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; padding: 16px; }
+    video { width: min(1280px, 100%); max-height: calc(100vh - 110px); border-radius: 12px; background: #000; }
+    .row { display: flex; gap: 12px; align-items: center; }
+    a.btn { background: var(--teal); color: #fff; text-decoration: none; font-weight: 700; padding: 12px 18px; border-radius: 8px; }
+    .brand { color: #fff; } .brand em { color: #9fd6cf; }
+  </style>
+</head>
+<body>
+  <video src="/media/safevoice-pitch.mp4" controls playsinline preload="metadata"></video>
+  <div class="row">
+    <span class="brand"><img src="/logo.svg" alt="" width="22" height="22"> Safe<em>Voice</em></span>
+    <a class="btn" href="/demo">Start the live demo →</a>
+  </div>
+</body>
+</html>

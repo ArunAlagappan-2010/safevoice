@@ -1,0 +1,18 @@
+{
+  "name": "safevoice",
+  "version": "1.0.0",
+  "description": "SafeVoice — anonymous reporting, AI triage and counsellor support for schools.",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test/smoke.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "optionalDependencies": {
+    "@anthropic-ai/sdk": "*"
+  },
+  "license": "MIT"
+}
