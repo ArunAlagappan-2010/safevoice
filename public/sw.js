@@ -1,7 +1,7 @@
 // Keeps the student app openable when the phone is off the SafeVoice Wi-Fi.
 // Browsers only run this over https or on localhost; on plain http it is skipped
 // and the in-page outbox still holds reports until the phone reconnects.
-const CACHE = 'safevoice-v3';
+const CACHE = 'safevoice-v4';
 const SHELL = [
   '/', '/base.css', '/student.css', '/student.js', '/logo.svg', '/manifest.webmanifest',
   '/icons/icon-192.png', '/fonts/inter-latin-400-normal.woff2', '/fonts/inter-latin-600-normal.woff2',

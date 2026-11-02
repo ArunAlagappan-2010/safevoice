@@ -60,6 +60,12 @@
         </ol>
       </div>
 
+      <div class="wedid" id="weDid" hidden>
+        <p class="eyebrow muted" data-t="weDidTitle">You said, we did</p>
+        <p class="wedid-sub" data-t="weDidSub">Changes the school made because students spoke up.</p>
+        <ul id="weDidList"></ul>
+      </div>
+
       <ul class="promises">
         <li><span class="ico teal"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 8a7 7 0 0 1 14 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M4 4l16 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><div><b data-t="p1a">No name.</b> <span data-t="p1b">We never ask who you are.</span></div></li>
         <li><span class="ico lav"><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/></svg></span><div><b data-t="p2a">No login.</b> <span data-t="p2b">Just a private case code.</span></div></li>
@@ -201,6 +207,15 @@
         <span class="badge" id="threadStatus"></span>
       </div>
       <div class="thread" id="thread" aria-live="polite"></div>
+      <div class="feel" id="feelBox" hidden>
+        <b data-t="feelQ">Do you feel safer now?</b>
+        <div class="feel-btns">
+          <button type="button" class="chip" data-safer="yes" data-t="feelYes">Yes</button>
+          <button type="button" class="chip" data-safer="somewhat" data-t="feelSome">A bit</button>
+          <button type="button" class="chip" data-safer="no" data-t="feelNo">Not yet</button>
+        </div>
+        <p class="feel-thanks" id="feelThanks" hidden></p>
+      </div>
       <form id="msgForm" class="msg-form" novalidate>
         <textarea id="msgText" rows="2" maxlength="4000" data-tp="addMessage" placeholder="Add something or reply…"></textarea>
         <button class="btn primary" type="submit" data-t="sendMsg">Send</button>

@@ -102,6 +102,70 @@ try {
   assert.equal((await j('/api/settings', null, token)).body.phones, 0);
   console.log('ok  phone presence count + network info');
 
+  // Roles: the principal sees trends but never a report.
+  const principal = (await j('/api/login', { pin: '9090' })).body;
+  assert.equal(principal.staff.role, 'viewer');
+  assert.equal((await j('/api/cases', null, principal.token)).status, 403);
+  const ana = (await j('/api/analytics?days=30', null, principal.token)).body;
+  assert.ok(ana.kpis.reports > 0 && ana.weeks.length === 8);
+  assert.equal(JSON.stringify(ana).includes(rep.body.code), false, 'no case codes in insights');
+  console.log('ok  roles: principal sees insights, not reports');
+
+  // Case workflow: assign, note, escalate, resolve, then the student says if they feel safer.
+  const staff = (await j('/api/staff', null, token)).body.staff;
+  const arjun = staff.find((s) => s.name === 'Mr. Arjun Das');
+  await j(`/api/cases/${c.id}/assign`, { staffId: arjun.id }, token);
+  await j(`/api/cases/${c.id}/note`, { text: 'Spoke to the class teacher.' }, token);
+  await j(`/api/cases/${c.id}/escalate`, { to: 'Principal', note: 'Weapon threat' }, token);
+  const done = (await j(`/api/cases/${c.id}/status`, { status: 'resolved' }, token)).body;
+  assert.equal(done.assignee, arjun.id);
+  assert.equal(done.escalations[0].to, 'Principal');
+  assert.ok(done.sla.met !== null, 'first reply recorded against the target');
+  const sv = (await j(`/api/case/${rep.body.code}`)).body;
+  assert.equal(sv.status, 'resolved');
+  assert.equal(sv.notes, undefined, 'students never see private notes');
+  const fb = (await j(`/api/case/${rep.body.code}/feedback`, { safer: 'no' })).body;
+  assert.equal(fb.status, 'replied', 'not feeling safer reopens the case');
+  const audit = (await j('/api/audit', null, token)).body.entries.map((a) => a.action);
+  for (const a of ['case.assigned', 'case.note', 'case.escalated', 'case.status', 'login']) assert.ok(audit.includes(a), a);
+  console.log('ok  workflow: assign, note, escalate, resolve, feedback, audit');
+
+  // Peer support team: tasks and passing on concerns, never reading reports.
+  const peer = (await j('/api/login', { pin: '1111' })).body;
+  assert.equal(peer.staff.role, 'peer');
+  assert.equal((await j('/api/cases', null, peer.token)).status, 403);
+  const tasks = (await j('/api/tasks', null, peer.token)).body.tasks;
+  assert.ok(tasks.length && tasks.every((t) => t.assignees.some((a) => a.id === peer.staff.id)), 'peer sees only own tasks');
+  assert.equal((await j(`/api/tasks/${tasks[0].id}/update`, { text: 'All calm today.' }, peer.token)).status, 200);
+  const passed = await j('/api/peer/concern', { text: 'A younger student said seniors take his money at the bus stop every day', location: 'School bus' }, peer.token);
+  assert.equal(passed.status, 201);
+  const fromPeer = (await j('/api/cases', null, token)).body.cases.find((x) => x.about === 'peer');
+  assert.ok(fromPeer && fromPeer.viaPeer === peer.staff.id);
+  const t2 = await j('/api/tasks', { title: 'Be at the bus stop after school', place: 'School bus', assignees: [peer.staff.id] }, token);
+  assert.equal(t2.status, 201);
+  assert.equal((await j('/api/tasks', { title: 'x', assignees: [peer.staff.id] }, peer.token)).status, 403, 'peers cannot create tasks');
+  console.log('ok  peer support team: tasks, updates, pass-on concern');
+
+  // Zone tracker and watched zones.
+  const zone = (await j('/api/zones/corridor?days=365', null, token)).body;
+  assert.equal(zone.name, 'Corridors');
+  assert.ok(zone.total >= 7 && zone.series.length >= 12 && zone.step === 30, 'a year of history in monthly buckets');
+  assert.ok(zone.actions.length >= 2, 'actions taken in the zone are listed');
+  const zp = (await j('/api/zones/corridor?days=90', null, principal.token)).body;
+  assert.equal(zp.cases, undefined, 'principal gets zone counts, not reports');
+  assert.equal((await j('/api/zones/gate/watch', { threshold: 1, days: 7 }, principal.token)).status, 403);
+  assert.equal((await j('/api/zones/gate/watch', { threshold: 1, days: 7 }, token)).status, 200);
+  await j('/api/reports', { text: 'Seniors wait at the school gate and push us', location: 'School gate' });
+  const hs = (await j('/api/hotspots?days=365', null, token)).body;
+  assert.ok(hs.zones.gate.count >= 1 && hs.zones.stairs && hs.zones.labs, 'wider map zones');
+  assert.equal(hs.watch.find((w) => w.zone === 'gate').rising, true);
+  const alerts = (await j('/api/audit?q=zone', null, token)).body.entries.map((a) => a.action);
+  assert.ok(alerts.includes('zone.alert'), 'watched zone raised an alert');
+  console.log('ok  zone tracker, year range, watched-zone alert');
+
+  const info = (await j('/api/info')).body;
+  assert.ok(info.notices.length >= 1, '"you said, we did" updates reach students');
+
   assert.equal((await j('/api/case/SV-NOPE-000')).status, 404);
   assert.equal((await j('/api/reports', { text: '' })).status, 400);
   console.log('\nAll smoke tests passed.');

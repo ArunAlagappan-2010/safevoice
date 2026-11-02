@@ -205,3 +205,19 @@ textarea:focus, .input:focus { outline: none; border-color: var(--teal); box-sha
 .msg-form textarea { min-height: 52px; }
 
 .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--ink-2); color: #fff; padding: 10px 16px; border-radius: 999px; font-size: 14px; font-weight: 600; z-index: 10; }
+
+/* "You said, we did": proof that speaking up changes things */
+.wedid { background: linear-gradient(135deg, var(--teal-soft), var(--sky-soft)); border-radius: var(--radius); padding: 16px; }
+.wedid .eyebrow { margin: 0; color: var(--teal-2); }
+.wedid-sub { margin: 2px 0 10px; font-size: 13px; color: var(--muted); }
+.wedid ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.wedid li { background: rgba(255, 255, 255, 0.75); border-radius: 12px; padding: 10px 12px; display: flex; flex-direction: column; gap: 2px; font-size: 14px; }
+.wedid li b { font-size: 14px; }
+.wedid li b::before { content: '✓ '; color: var(--teal); }
+.wedid li span { color: var(--ink-2); }
+
+/* closing the loop on a resolved case */
+.feel { background: var(--lav-soft); border-radius: var(--radius); padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
+.feel-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+.feel-btns .chip.on { background: var(--lav); color: #fff; border-color: var(--lav); }
+.feel-thanks { margin: 0; font-size: 14px; color: var(--lav-2); }

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="referrer" content="no-referrer">
-  <title>SafeVoice · Counsellor</title>
+  <title>SafeVoice · Staff dashboard</title>
   <link rel="icon" href="/logo.svg">
   <link rel="stylesheet" href="/base.css">
   <link rel="stylesheet" href="/counsellor.css">
@@ -12,26 +12,46 @@
 <body>
   <!-- LOGIN -->
   <main class="login" id="login" hidden>
-    <form class="login-card" id="loginForm" novalidate>
-      <span class="brand"><img src="/logo.svg" alt="" width="22" height="22"> Safe<em>Voice</em></span>
-      <h1 class="serif">Counsellor <span class="accent">login</span></h1>
-      <p class="muted">One login per school. Students never need an account.</p>
-      <label class="eyebrow" for="pin">PIN</label>
-      <input id="pin" type="password" inputmode="numeric" autocomplete="current-password" maxlength="12" autofocus>
-      <p class="err" id="loginErr" role="alert" hidden></p>
-      <button class="btn primary" type="submit">Open dashboard</button>
-      <p class="demo-note">Demo PIN: <b class="mono">2468</b></p>
-    </form>
+    <div class="login-wrap">
+      <section class="login-side">
+        <span class="brand on-dark"><img src="/logo.svg" alt="" width="22" height="22"> Safe<em>Voice</em></span>
+        <h1 class="serif">Every report seen.<br><em>Every student heard.</em></h1>
+        <ul class="login-points">
+          <li>Role-based access for counsellors and leadership</li>
+          <li>Response targets, assignments and a full audit trail</li>
+          <li>Students stay anonymous. Always.</li>
+        </ul>
+        <p class="login-school" id="loginSchool"></p>
+      </section>
+      <form class="login-card" id="loginForm" novalidate>
+        <p class="eyebrow tint">Staff sign in</p>
+        <h2 class="serif">Who's signing in?</h2>
+        <div class="who" id="whoList" role="radiogroup" aria-label="Staff member"></div>
+        <label class="eyebrow dim" for="pin">PIN</label>
+        <input id="pin" type="password" inputmode="numeric" autocomplete="current-password" maxlength="8">
+        <p class="err" id="loginErr" role="alert" hidden></p>
+        <button class="btn primary big" type="submit">Sign in</button>
+        <p class="demo-note">Demo PINs · Lead counsellor <b class="mono">2468</b> · Counsellor <b class="mono">1357</b> · Principal <b class="mono">9090</b></p>
+      </form>
+    </div>
   </main>
 
   <!-- APP -->
   <div class="shell" id="shell" hidden>
     <aside class="side">
       <span class="brand on-dark"><img src="/logo.svg" alt="" width="22" height="22"> Safe<em>Voice</em></span>
+      <p class="school" id="schoolName"></p>
       <nav class="nav" aria-label="Sections">
-        <button data-view="cases" class="active">Cases <span class="count" id="navCount"></span></button>
-        <button data-view="hotspots">Hotspots</button>
-        <button data-view="settings">Settings</button>
+        <p class="nav-h">Workspace</p>
+        <button data-view="overview" data-perm="analytics"><svg viewBox="0 0 24 24"><path d="M4 13h6V4H4zm10 7h6V11h-6zM4 20h6v-4H4zm10-12h6V4h-6z"/></svg><span>Overview</span></button>
+        <button data-view="cases" data-perm="cases"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span>Cases</span><span class="count" id="navCount"></span></button>
+        <button data-view="hotspots" data-perm="analytics"><svg viewBox="0 0 24 24"><path d="M12 21s-6-5.6-6-11a6 6 0 0 1 12 0c0 5.4-6 11-6 11z"/><circle cx="12" cy="10" r="2.2"/></svg><span>Hotspots</span></button>
+        <button data-view="peer" data-perm="cases|peer"><svg viewBox="0 0 24 24"><circle cx="8" cy="9" r="2.6"/><circle cx="16" cy="9" r="2.6"/><path d="M3 19a5 5 0 0 1 10 0M11 19a5 5 0 0 1 10 0"/></svg><span id="navPeer">Peer support team</span></button>
+        <button data-view="notices" data-perm="notices"><svg viewBox="0 0 24 24"><path d="M5 12l4 4L19 6"/></svg><span>You said, we did</span></button>
+        <p class="nav-h" data-perm="team">Administration</p>
+        <button data-view="team" data-perm="team"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0 1 12 0M16 4a3 3 0 0 1 0 6m2 10a6 6 0 0 0-3-5.2"/></svg><span>Team &amp; roles</span></button>
+        <button data-view="audit" data-perm="audit"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6zM14 3v5h5M9 13h7M9 17h5"/></svg><span>Audit log</span></button>
+        <button data-view="settings" data-perm="cases|analytics"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3m0 14v3M4.2 4.2l2.1 2.1m11.4 11.4 2.1 2.1M2 12h3m14 0h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg><span>Settings</span></button>
       </nav>
       <div class="side-foot">
         <div class="net" id="net" title="Phones with SafeVoice open right now">
@@ -39,27 +59,91 @@
           <span><b id="phoneCount">0</b> phones connected<br><small id="netName">Local network</small></span>
         </div>
         <span class="ai-pill" id="aiPill">AI triage</span>
-        <p>Counsellor view<br>Names are never shown</p>
-        <button class="linkish" id="logoutBtn">Log out</button>
+        <div class="me">
+          <span class="avatar" id="meAvatar"></span>
+          <span><b id="meName"></b><small id="meRole"></small></span>
+          <button class="icon-btn" id="logoutBtn" title="Sign out" aria-label="Sign out"><svg viewBox="0 0 24 24"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3M10 8l-4 4 4 4M6 12h10"/></svg></button>
+        </div>
       </div>
     </aside>
 
     <main class="main">
       <div class="alert" id="alert" role="alert" hidden></div>
 
-      <!-- CASES -->
-      <section class="view" data-view="cases">
+      <!-- OVERVIEW -->
+      <section class="view" data-view="overview" hidden>
         <header class="view-head">
           <div>
-            <h1 class="serif">Cases</h1>
-            <p class="eyebrow dim">Sorted by urgency</p>
+            <p class="eyebrow dim" id="greetDate"></p>
+            <h1 class="serif" id="greeting">Overview</h1>
           </div>
-          <div class="seg" role="tablist" aria-label="Filter cases">
+          <div class="head-actions">
+            <div class="seg" role="tablist" aria-label="Period">
+              <button data-period="7" role="tab">7 days</button>
+              <button data-period="30" class="active" role="tab">30 days</button>
+              <button data-period="90" role="tab">90 days</button>
+            </div>
+            <button class="btn ghost" id="printReport"><svg viewBox="0 0 24 24"><path d="M7 9V3h10v6M7 17H4v-7h16v7h-3M7 14h10v7H7z"/></svg>Safety report</button>
+          </div>
+        </header>
+        <div class="print-head" aria-hidden="true">
+          <span class="brand"><img src="/logo.svg" alt="" width="22" height="22"> Safe<em>Voice</em></span>
+          <span id="printMeta"></span>
+        </div>
+        <div class="kpis" id="kpis"></div>
+        <div class="ov-grid">
+          <div class="panel span2">
+            <div class="panel-head"><h2 class="serif">Reports and resolutions, last 8 weeks</h2><span class="legend"><i class="lg-a"></i>Reports <i class="lg-b"></i>High urgency <i class="lg-c"></i>Resolved</span></div>
+            <div id="trend" class="trend"></div>
+          </div>
+          <div class="panel" id="attentionPanel">
+            <div class="panel-head"><h2 class="serif">Needs attention</h2><button class="linkish" data-goto="cases">All cases →</button></div>
+            <div id="attention" class="attention"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><h2 class="serif">Types of incident</h2></div>
+            <div id="ovCats" class="cat-bars"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><h2 class="serif">Team workload</h2></div>
+            <div id="workload" class="workload"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><h2 class="serif">Escalations</h2></div>
+            <div id="escalations" class="feed"></div>
+          </div>
+          <div class="panel span2">
+            <div class="panel-head"><h2 class="serif">You said, we did</h2><button class="linkish" data-goto="notices" data-perm-hide="notices">Manage →</button></div>
+            <div id="actions" class="feed"></div>
+          </div>
+        </div>
+        <p class="foot-note">Insights are anonymous and school-level. Individual students are never identified.</p>
+      </section>
+
+      <!-- CASES -->
+      <section class="view" data-view="cases" hidden>
+        <header class="view-head">
+          <div>
+            <p class="eyebrow dim" id="casesSub">Sorted by urgency</p>
+            <h1 class="serif">Cases</h1>
+          </div>
+          <div class="head-actions">
+            <a class="btn ghost" id="exportCsv" href="#"><svg viewBox="0 0 24 24"><path d="M12 4v11m-4-4 4 4 4-4M5 20h14"/></svg>Export CSV</a>
+          </div>
+        </header>
+        <div class="toolbar">
+          <label class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="m20 20-4.5-4.5"/></svg><input id="caseSearch" type="search" placeholder="Search code, words, place, tag…" aria-label="Search cases"></label>
+          <div class="seg" role="tablist" aria-label="Status">
             <button data-filter="open" class="active" role="tab">Open</button>
+            <button data-filter="mine" role="tab">Mine</button>
+            <button data-filter="unassigned" role="tab">Unassigned</button>
+            <button data-filter="overdue" role="tab">Overdue</button>
             <button data-filter="resolved" role="tab">Resolved</button>
             <button data-filter="all" role="tab">All</button>
           </div>
-        </header>
+          <select id="catFilter" aria-label="Type of incident"><option value="">All types</option></select>
+          <select id="sortBy" aria-label="Sort"><option value="urgency">Sort: urgency</option><option value="due">Sort: response due</option><option value="newest">Sort: newest</option></select>
+        </div>
         <div class="cases-grid">
           <div class="case-list" id="caseList" role="list"></div>
           <article class="detail" id="detail" aria-live="polite"></article>
@@ -70,25 +154,37 @@
       <section class="view" data-view="hotspots" hidden>
         <header class="view-head">
           <div>
-            <h1 class="serif">Hotspots</h1>
             <p class="eyebrow dim" id="hotSub">Last 3 weeks</p>
+            <h1 class="serif">Hotspots</h1>
           </div>
           <div class="seg" role="tablist" aria-label="Time range">
             <button data-days="7" role="tab">7 days</button>
             <button data-days="21" class="active" role="tab">3 weeks</button>
             <button data-days="90" role="tab">90 days</button>
+            <button data-days="180" role="tab">Term</button>
+            <button data-days="365" role="tab">Year</button>
           </div>
         </header>
-        <div class="hot-grid">
-          <div class="map-wrap">
+        <div class="hot-top">
+          <div class="panel map-wrap">
+            <div class="panel-head"><h2 class="serif">School map</h2><span class="dim small">Click a zone to track it · bigger, redder circles mean more and more serious reports</span></div>
             <div class="map" id="map"></div>
             <div class="map-extra" id="mapExtra"></div>
           </div>
+          <aside class="panel tracker" id="tracker">
+            <div class="empty">Select a zone on the map to see its history, what the school did there, and whether it worked.</div>
+          </aside>
+        </div>
+        <div class="hot-grid">
+          <div class="panel">
+            <div class="panel-head"><h2 class="serif">Watched zones</h2><span class="dim small">Alerts when reports pick up again</span></div>
+            <div id="watchList" class="watch-list"></div>
+          </div>
+          <div class="patterns" id="patterns"></div>
           <div class="panel chart-panel">
             <h2 class="serif">Incidents by time of day</h2>
             <div class="bars" id="timeBars"></div>
           </div>
-          <div class="patterns" id="patterns"></div>
           <div class="panel">
             <h2 class="serif">By type</h2>
             <div id="catBars" class="cat-bars"></div>
@@ -96,12 +192,140 @@
         </div>
       </section>
 
+      <!-- PEER SUPPORT TEAM -->
+      <section class="view" data-view="peer" hidden>
+        <header class="view-head">
+          <div>
+            <p class="eyebrow dim" id="peerSub">Students helping the counsellor prevent conflict</p>
+            <h1 class="serif" id="peerTitle">Peer support team</h1>
+          </div>
+        </header>
+        <div class="two-col">
+          <div class="stack-col">
+            <form class="panel form" id="taskForm" data-perm="cases">
+              <h2 class="serif">Give the team a task</h2>
+              <p class="dim small">Describe places, times and what to do. Never name a student or share what anyone reported.</p>
+              <label>Task<input id="tTitle" maxlength="100" required placeholder="e.g. Be around the canteen at lunch"></label>
+              <div class="form-row">
+                <label>Where<input id="tPlace" maxlength="60" placeholder="Canteen"></label>
+                <label>When<select id="tTime"><option value="">Any time</option></select></label>
+                <label>Until<input id="tDue" type="date"></label>
+              </div>
+              <label>What to do<textarea id="tDetails" rows="3" maxlength="1000" placeholder="What to look out for, and who to tell."></textarea></label>
+              <fieldset class="pick"><legend>Who</legend><div id="tPeers"></div></fieldset>
+              <p class="err" id="tErr" hidden></p>
+              <button class="btn primary" type="submit">Give task</button>
+            </form>
+            <div class="panel" data-perm="cases">
+              <h2 class="serif">The team</h2>
+              <div id="teamList" class="workload"></div>
+              <p class="dim small">Add or remove members in Team &amp; roles with the role "Peer supporter (student)". They never see reports.</p>
+            </div>
+            <form class="panel form" id="concernForm" data-perm="peer">
+              <h2 class="serif">Pass on a concern</h2>
+              <p class="dim small">Someone told you something, or you saw something? Write it down here. It goes straight to the counsellor. You won't see the case afterwards, and that's fine: it's in safe hands.</p>
+              <label>What did you hear or see?<textarea id="cText" rows="4" maxlength="4000" required placeholder="Stick to what happened. Leave out names unless the counsellor needs them to keep someone safe."></textarea></label>
+              <div class="form-row">
+                <label>Where<select id="cWhere"><option value="">Not sure</option></select></label>
+                <label>When<select id="cWhen"><option value="">Not sure</option></select></label>
+              </div>
+              <label class="check"><input type="checkbox" id="cUrgent"> Someone may be in danger right now</label>
+              <p class="err" id="cErr" hidden></p>
+              <button class="btn primary" type="submit">Send to counsellor</button>
+            </form>
+            <div class="panel guide" data-perm="peer">
+              <h2 class="serif">How we help</h2>
+              <ul>
+                <li><b>Be there, be kind.</b> Being around and friendly stops a lot of trouble before it starts.</li>
+                <li><b>Don't investigate.</b> Never question people or try to sort out serious problems yourself.</li>
+                <li><b>Tell straight away.</b> If someone is hurt, threatened or talks about harming themselves, find a teacher now and pass it on here.</li>
+                <li><b>Keep it private.</b> Don't share what people tell you with friends.</li>
+                <li><b>Point to SafeVoice.</b> Anyone can report anonymously from their phone.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="task-list" id="taskList"></div>
+        </div>
+      </section>
+
+      <!-- NOTICES -->
+      <section class="view" data-view="notices" hidden>
+        <header class="view-head">
+          <div>
+            <p class="eyebrow dim">Show students that reporting leads to action · shown on the student app</p>
+            <h1 class="serif">You said, we did</h1>
+          </div>
+        </header>
+        <div class="two-col">
+          <form class="panel form" id="noticeForm">
+            <h2 class="serif">Share an action</h2>
+            <p class="dim small">Describe the problem in general terms and what changed. Never mention a student, a case code or details that could identify anyone.</p>
+            <label>You told us about…<input id="nTitle" maxlength="80" placeholder="e.g. Class 9 corridor at lunch" required></label>
+            <label>What the school did<textarea id="nBody" maxlength="600" rows="4" placeholder="e.g. Two teachers now stand in the corridor every lunch break."></textarea></label>
+            <label class="check"><input type="checkbox" id="nPinned"> Pin to the top</label>
+            <p class="err" id="nErr" hidden></p>
+            <button class="btn primary" type="submit">Publish to students</button>
+          </form>
+          <div class="notice-list" id="noticeList"></div>
+        </div>
+      </section>
+
+      <!-- TEAM -->
+      <section class="view" data-view="team" hidden>
+        <header class="view-head">
+          <div>
+            <p class="eyebrow dim">Who can do what</p>
+            <h1 class="serif">Team &amp; roles</h1>
+          </div>
+        </header>
+        <div class="panel table-panel">
+          <table class="table" id="teamTable"></table>
+        </div>
+        <div class="two-col">
+          <form class="panel form" id="staffForm">
+            <h2 class="serif">Add a team member</h2>
+            <label>Name<input id="sName" maxlength="60" required placeholder="Ms. Anitha K"></label>
+            <label>Job title<input id="sTitle" maxlength="60" placeholder="Class 9 teacher"></label>
+            <label>Role<select id="sRole"></select></label>
+            <label>PIN (4–8 digits)<input id="sPin" inputmode="numeric" maxlength="8" required></label>
+            <p class="err" id="sErr" hidden></p>
+            <button class="btn primary" type="submit">Add member</button>
+          </form>
+          <div class="panel">
+            <h2 class="serif">Roles</h2>
+            <ul class="roles">
+              <li><b>Administrator</b> Everything below, plus team, audit log, settings and data.</li>
+              <li><b>Counsellor</b> Reads and answers cases, posts notices, sees insights.</li>
+              <li><b>Principal (insights only)</b> Trends, hotspots, response times and outcomes. Never sees what a student wrote.</li>
+              <li><b>Peer supporter (student)</b> Gets tasks from the counsellor and passes on concerns. Never sees any report.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- AUDIT -->
+      <section class="view" data-view="audit" hidden>
+        <header class="view-head">
+          <div>
+            <p class="eyebrow dim" id="auditSub">Every staff action, recorded</p>
+            <h1 class="serif">Audit log</h1>
+          </div>
+          <div class="head-actions">
+            <label class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="m20 20-4.5-4.5"/></svg><input id="auditSearch" type="search" placeholder="Filter by person, action, case…" aria-label="Filter audit log"></label>
+          </div>
+        </header>
+        <div class="panel table-panel">
+          <table class="table" id="auditTable"></table>
+        </div>
+        <p class="foot-note">Student activity is never logged against a person. Only staff actions appear here.</p>
+      </section>
+
       <!-- SETTINGS -->
       <section class="view" data-view="settings" hidden>
         <header class="view-head">
           <div>
-            <h1 class="serif">Settings</h1>
             <p class="eyebrow dim">Privacy · Safety · Scale</p>
+            <h1 class="serif">Settings</h1>
           </div>
         </header>
         <div class="settings-grid">
@@ -113,7 +337,7 @@
               <div class="connect-step" id="wifiBox">
                 <span class="step-n">1</span>
                 <div id="wifiQr" class="qr"></div>
-                <div><b>Join the Wi-Fi</b><div class="kv"><span>Name</span><code id="ssid">—</code><span>Password</span><code id="wpass">—</code></div></div>
+                <div><b>Join the Wi-Fi</b><div class="kv"><span>Name</span><code id="ssid">—</code><span>Password</span><code id="wpass">—</code><span>Range</span><code id="wband">—</code></div></div>
               </div>
               <div class="connect-step">
                 <span class="step-n">2</span>
@@ -125,13 +349,27 @@
               <a class="btn ghost" href="/join" target="_blank" rel="noopener">Open poster for projector / print</a>
             </div>
           </div>
+          <div class="panel" data-perm="settings">
+            <p class="eyebrow tint">School</p>
+            <h2 class="serif">School profile</h2>
+            <label class="dim" for="schoolInput">School name, shown to staff and students</label>
+            <div class="inline"><input id="schoolInput" maxlength="80"><button class="btn ghost" id="saveSchool">Save</button></div>
+            <label class="dim" for="teamInput">Name for the student helper group (e.g. Student council, Peer mediators)</label>
+            <div class="inline"><input id="teamInput" maxlength="40"><button class="btn ghost" id="saveTeam">Save</button></div>
+          </div>
+          <div class="panel" data-perm="settings">
+            <p class="eyebrow tint">Response targets</p>
+            <h2 class="serif">Time to first reply</h2>
+            <div class="sla-grid" id="slaGrid"></div>
+            <div class="inline"><button class="btn ghost" id="saveSla">Save targets</button></div>
+          </div>
           <div class="panel">
             <p class="eyebrow tint">AI triage</p>
             <h2 class="serif" id="aiTitle">—</h2>
             <p class="dim" id="aiDesc"></p>
             <p class="dim small">AI prioritises. A counsellor decides. Every urgency can be overridden.</p>
           </div>
-          <div class="panel">
+          <div class="panel" data-perm="settings">
             <p class="eyebrow tint">Deleted on schedule</p>
             <h2 class="serif">Data retention</h2>
             <label class="dim" for="retention">Delete reports automatically after</label>
@@ -144,7 +382,7 @@
             </div>
             <p class="dim small" id="totalCases"></p>
           </div>
-          <div class="panel">
+          <div class="panel" data-perm="settings">
             <p class="eyebrow tint">Demo</p>
             <h2 class="serif">Demo data</h2>
             <p class="dim">All demo data is fictional.</p>
@@ -157,9 +395,9 @@
             <p class="eyebrow tint">Built to protect students</p>
             <ul class="promises">
               <li><b>Anonymous by design.</b> No names. No IP addresses. No login for students.</li>
-              <li><b>Deleted on schedule.</b> Reports are not kept forever.</li>
+              <li><b>Need-to-know access.</b> Leadership sees trends, never stories. Every case view is logged.</li>
               <li><b>Human in the loop.</b> AI prioritises. A counsellor decides.</li>
-              <li><b>Any school can adopt.</b> One counsellor login. No hardware.</li>
+              <li><b>Deleted on schedule.</b> Reports are not kept forever.</li>
             </ul>
           </div>
         </div>
@@ -167,6 +405,7 @@
     </main>
   </div>
 
+  <div class="toast" id="toast" role="status" hidden></div>
   <script src="/vendor/qrcode.js" defer></script>
   <script src="/qr.js" defer></script>
   <script src="/counsellor.js" defer></script>

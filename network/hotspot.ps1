@@ -5,6 +5,10 @@
 #   powershell -ExecutionPolicy Bypass -File hotspot.ps1 -Action start -KeepAlive
 #   powershell -ExecutionPolicy Bypass -File hotspot.ps1 -Action stop
 #   powershell -ExecutionPolicy Bypass -File hotspot.ps1 -Action status
+#   powershell -ExecutionPolicy Bypass -File hotspot.ps1 -Range speed   (5 GHz: faster, shorter reach)
+#
+# Range: 'long' (default) uses 2.4 GHz, which reaches further and passes through
+# walls better than 5 GHz. Phones only send short text, so speed doesn't matter.
 #
 # Must run in Windows PowerShell 5.1 (powershell.exe), not PowerShell 7.
 param(
@@ -12,6 +16,7 @@ param(
   [string]$Ssid,
   [string]$Password,
   [int]$Port = 3000,
+  [ValidateSet('long', 'speed', 'auto')] [string]$Range,
   [switch]$KeepAlive
 )
 
@@ -39,6 +44,8 @@ if (-not $Ssid) { $Ssid = 'SafeVoice' }
 if (-not $Password) { $Password = Read-EnvValue 'HOTSPOT_PASSWORD' }
 if (-not $Password) { $Password = 'safevoice2026' }
 if ($Password.Length -lt 8) { throw 'Wi-Fi password must be at least 8 characters.' }
+if (-not $Range) { $Range = Read-EnvValue 'HOTSPOT_RANGE' }
+if (-not $Range) { $Range = 'long' }
 
 # ---------- firewall: allow phones on the local network to reach the app ----------
 function Ensure-Firewall {
@@ -72,6 +79,8 @@ function AwaitAction($op) { $t = $asTaskAction.Invoke($null, @($op)); $t.Wait(-1
 $NI = [Windows.Networking.Connectivity.NetworkInformation, Windows.Networking.Connectivity, ContentType = WindowsRuntime]
 $TM = [Windows.Networking.NetworkOperators.NetworkOperatorTetheringManager, Windows.Networking.NetworkOperators, ContentType = WindowsRuntime]
 $ResultType = [Windows.Networking.NetworkOperators.NetworkOperatorTetheringOperationResult, Windows.Networking.NetworkOperators, ContentType = WindowsRuntime]
+$BandType = [Windows.Networking.NetworkOperators.TetheringWiFiBand, Windows.Networking.NetworkOperators, ContentType = WindowsRuntime]
+$WantBand = @{ long = 'TwoPointFourGigahertz'; speed = 'FiveGigahertz'; auto = 'Auto' }[$Range]
 
 function Get-Manager {
   # With internet: share it. Without internet (school, no modem): any profile works;
@@ -90,11 +99,19 @@ function Get-Manager {
 
 function Start-Hotspot($m) {
   $cfg = $m.GetCurrentAccessPointConfiguration()
-  if ($cfg.Ssid -ne $Ssid -or $cfg.Passphrase -ne $Password) {
+  # Older Windows versions can't choose a band; the hotspot still works on Auto.
+  $bandOk = $false
+  try { $bandOk = $cfg.IsBandSupported([Enum]::Parse($BandType, $WantBand)) } catch {}
+  $bandChange = $bandOk -and "$($cfg.Band)" -ne $WantBand
+  if ($cfg.Ssid -ne $Ssid -or $cfg.Passphrase -ne $Password -or $bandChange) {
     $cfg.Ssid = $Ssid
     $cfg.Passphrase = $Password
+    if ($bandOk) { $cfg.Band = [Enum]::Parse($BandType, $WantBand) }
+    # A running hotspot keeps its old band until restarted.
+    if ($bandChange -and $m.TetheringOperationalState -eq 'On') { Await ($m.StopTetheringAsync()) $ResultType | Out-Null }
     AwaitAction ($m.ConfigureAccessPointAsync($cfg))
   }
+  $script:BandInUse = "$($m.GetCurrentAccessPointConfiguration().Band)"
   if ($m.TetheringOperationalState -ne 'On') {
     $r = Await ($m.StartTetheringAsync()) $ResultType
     if ($r.Status -ne 'Success') { throw "Could not start hotspot: $($r.Status) $($r.AdditionalErrorMessage)" }
@@ -105,7 +122,8 @@ $m = Get-Manager
 
 switch ($Action) {
   'status' {
-    Write-Host "Hotspot: $($m.TetheringOperationalState)   Wi-Fi: $($m.GetCurrentAccessPointConfiguration().Ssid)   Phones connected: $($m.ClientCount)/$($m.MaxClientCount)"
+    $c = $m.GetCurrentAccessPointConfiguration()
+    Write-Host "Hotspot: $($m.TetheringOperationalState)   Wi-Fi: $($c.Ssid)   Band: $($c.Band)   Phones connected: $($m.ClientCount)/$($m.MaxClientCount)"
   }
   'stop' {
     $r = Await ($m.StopTetheringAsync()) $ResultType
@@ -115,12 +133,15 @@ switch ($Action) {
     Ensure-Firewall
     Write-EnvValue 'HOTSPOT_SSID' $Ssid
     Write-EnvValue 'HOTSPOT_PASSWORD' $Password
+    Write-EnvValue 'HOTSPOT_RANGE' $Range
     Start-Hotspot $m
+    Write-EnvValue 'HOTSPOT_BAND' $script:BandInUse
     Write-Host ''
     Write-Host "  Wi-Fi network : $Ssid"
     Write-Host "  Password      : $Password"
     Write-Host "  Phones open   : http://192.168.137.1:$Port/"
     Write-Host "  Max phones    : $($m.MaxClientCount)"
+    Write-Host "  Band          : $($script:BandInUse) $(if ($script:BandInUse -eq 'TwoPointFourGigahertz') { '(long range)' })"
     Write-Host ''
     if ($KeepAlive) {
       $Host.UI.RawUI.WindowTitle = 'SafeVoice Wi-Fi'

@@ -23,7 +23,7 @@
       st_new: 'Received', st_replied: 'Counsellor replied', st_resolved: 'Closed',
       errText: 'Please tell us a little about what happened.', errCode: 'Please enter your case code.',
       errNet: 'Could not reach SafeVoice. Check your connection and try again.',
-      locs: { Corridor: 'Corridor', Classroom: 'Classroom', Canteen: 'Canteen', Playground: 'Playground', Washrooms: 'Washrooms', Library: 'Library', 'School bus': 'School bus', Online: 'Online' },
+      locs: { Corridor: 'Corridor', Classroom: 'Classroom', Canteen: 'Canteen', Playground: 'Playground', Washrooms: 'Washrooms', Library: 'Library', Staircase: 'Staircase', 'School gate': 'School gate', 'School bus': 'School bus', Online: 'Online' },
       times: { Morning: 'Morning', Break: 'Break', Lunch: 'Lunch', 'After school': 'After school' },
       hl: { 'Tele-MANAS': 'Free mental health support, 24×7', Childline: 'Free helpline for children, 24×7', Emergency: 'If you are in immediate danger' },
     },
@@ -47,7 +47,7 @@
       st_new: 'பெறப்பட்டது', st_replied: 'ஆலோசகர் பதிலளித்தார்', st_resolved: 'முடிக்கப்பட்டது',
       errText: 'என்ன நடந்தது என்று கொஞ்சம் சொல்லுங்கள்.', errCode: 'உங்கள் குறியீட்டை உள்ளிடவும்.',
       errNet: 'SafeVoice-ஐ அடைய முடியவில்லை. இணைப்பைச் சரிபார்த்து மீண்டும் முயலவும்.',
-      locs: { Corridor: 'நடைபாதை', Classroom: 'வகுப்பறை', Canteen: 'உணவகம்', Playground: 'விளையாட்டு மைதானம்', Washrooms: 'கழிவறை', Library: 'நூலகம்', 'School bus': 'பள்ளிப் பேருந்து', Online: 'ஆன்லைன்' },
+      locs: { Corridor: 'நடைபாதை', Classroom: 'வகுப்பறை', Canteen: 'உணவகம்', Playground: 'விளையாட்டு மைதானம்', Washrooms: 'கழிவறை', Library: 'நூலகம்', Staircase: 'படிக்கட்டு', 'School gate': 'பள்ளி வாசல்', 'School bus': 'பள்ளிப் பேருந்து', Online: 'ஆன்லைன்' },
       times: { Morning: 'காலை', Break: 'இடைவேளை', Lunch: 'மதிய உணவு', 'After school': 'பள்ளி முடிந்ததும்' },
       hl: { 'Tele-MANAS': 'இலவச மனநல உதவி, 24×7', Childline: 'குழந்தைகளுக்கான இலவச உதவி எண், 24×7', Emergency: 'நீங்கள் உடனடி ஆபத்தில் இருந்தால்' },
     },
@@ -89,6 +89,10 @@
     breatheTitle: 'Take a slow breath with me', breatheStart: 'Start breathing', breatheStop: 'Stop',
     breatheIn: 'Breathe in…', breatheHold: 'Hold…', breatheOut: 'Breathe out…',
     apkLink: 'Or download the Android app',
+    weDidTitle: 'You said, we did', weDidSub: 'Changes the school made because students spoke up.',
+    feelQ: 'Do you feel safer now?', feelYes: 'Yes', feelSome: 'A bit', feelNo: 'Not yet',
+    feelThanks: 'Thank you. This helps the school know what works.',
+    feelNoThanks: 'Thank you for telling us. Your case is open again and a counsellor will follow up.',
   });
   Object.assign(T.ta, {
     reassure: 'சொன்னதற்காக நீங்கள் சிக்கலில் மாட்ட மாட்டீர்கள். நண்பருக்காகப் புகார் செய்வதும் சரியே.',
@@ -105,6 +109,10 @@
     breatheTitle: 'என்னுடன் மெதுவாக மூச்சு விடுங்கள்', breatheStart: 'மூச்சுப் பயிற்சி தொடங்கு', breatheStop: 'நிறுத்து',
     breatheIn: 'மூச்சை உள்ளிழுங்கள்…', breatheHold: 'நிறுத்துங்கள்…', breatheOut: 'மூச்சை வெளியே விடுங்கள்…',
     apkLink: 'அல்லது Android செயலியைப் பதிவிறக்குங்கள்',
+    weDidTitle: 'நீங்கள் சொன்னீர்கள், நாங்கள் செய்தோம்', weDidSub: 'மாணவர்கள் பேசியதால் பள்ளி செய்த மாற்றங்கள்.',
+    feelQ: 'இப்போது நீங்கள் பாதுகாப்பாக உணர்கிறீர்களா?', feelYes: 'ஆம்', feelSome: 'கொஞ்சம்', feelNo: 'இன்னும் இல்லை',
+    feelThanks: 'நன்றி. எது பயனளிக்கிறது என்று பள்ளிக்குத் தெரிய இது உதவும்.',
+    feelNoThanks: 'சொன்னதற்கு நன்றி. உங்கள் வழக்கு மீண்டும் திறக்கப்பட்டது, ஒரு ஆலோசகர் தொடர்புகொள்வார்.',
   });
 
   // Inside the Android app (WebView) a native bridge is available.
@@ -116,7 +124,7 @@
   let lang = 'en';
   try { lang = sessionStorage.getItem('sv-lang') || 'en'; } catch {}
   let info = {
-    locations: ['Corridor', 'Classroom', 'Canteen', 'Playground', 'Washrooms', 'Library', 'School bus', 'Online'],
+    locations: ['Corridor', 'Classroom', 'Canteen', 'Playground', 'Washrooms', 'Library', 'Staircase', 'School gate', 'School bus', 'Online'],
     times: ['Morning', 'Break', 'Lunch', 'After school'],
     helplines: [
       { name: 'Tele-MANAS', number: '14416' }, { name: 'Childline', number: '1098' }, { name: 'Emergency', number: '112' },
@@ -490,6 +498,27 @@
       </div>`);
     if (!c.messages.some((m) => m.from === 'counsellor')) msgs.push(`<div class="waiting">${esc(t('waiting'))}</div>`);
     $('#thread').innerHTML = msgs.join('');
+    // Once a case is closed, ask whether things are actually better.
+    $('#feelBox').hidden = c.status !== 'resolved';
+    $$('[data-safer]').forEach((b) => b.classList.toggle('on', b.dataset.safer === c.feedback));
+  }
+
+  $$('[data-safer]').forEach((b) => b.addEventListener('click', async () => {
+    try {
+      const c = await api(`/api/case/${encodeURIComponent(state.code)}/feedback`, { safer: b.dataset.safer });
+      state.thread = c;
+      renderThread(c);
+      const msg = $('#feelThanks');
+      msg.textContent = t(b.dataset.safer === 'no' ? 'feelNoThanks' : 'feelThanks');
+      msg.hidden = false;
+      if (b.dataset.safer === 'no') $('#feelBox').hidden = false;
+    } catch (ex) { toast(ex.message); }
+  }));
+
+  function renderWeDid() {
+    const list = (info.notices || []).slice(0, 3);
+    $('#weDid').hidden = !list.length;
+    $('#weDidList').innerHTML = list.map((n) => `<li><b>${esc(n.title)}</b><span>${esc(n.body)}</span></li>`).join('');
   }
 
   $('#msgForm').addEventListener('submit', async (e) => {
@@ -518,6 +547,7 @@
   fetch('/api/info').then((r) => r.json()).then((d) => {
     info = { ...info, ...d };
     applyLang();
+    renderWeDid();
   }).catch(() => {});
   applyLang();
   connectLive();
