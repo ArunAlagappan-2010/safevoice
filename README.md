@@ -38,6 +38,11 @@ Change the Wi-Fi name or password: `powershell -ExecutionPolicy Bypass -File net
 - In Settings → Network → Mobile hotspot, turn **Power saving** off so Windows doesn't switch the hotspot off when no phones are connected. The keep-alive turns it back on either way.
 - **For a whole school:** use any cheap Wi-Fi router, even with no internet or modem plugged in. Connect the laptop to it and run `node server.js`. Phones join the router's Wi-Fi and open the address shown in Settings. A router handles 30–50+ phones and covers more area. The app works the same; only the Wi-Fi comes from the router instead of the laptop.
 
+## Download
+
+- **Android app:** [SafeVoice.apk (latest release)](https://github.com/ArunAlagappan-2010/safevoice/releases/latest/download/SafeVoice.apk)
+- **Everything else:** the green **Code** button → **Download ZIP**, then double-click `Start SafeVoice.bat`. Needs [Node.js](https://nodejs.org) 18 or newer.
+
 ## Android app (APK)
 
 `android/SafeVoice.apk` (about 40 KB) is ready to install. Phones can also download it from the SafeVoice server: on the student home page, tap **Download the Android app**, or open `http://192.168.137.1:3000/download/SafeVoice.apk`. Android asks to allow installs from the browser once.
