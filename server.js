@@ -193,11 +193,13 @@ function networkInfo() {
     }
   } catch { /* no hotspot configured */ }
   const urls = lanUrls();
+  const hotspot = urls.some((u) => u.includes('192.168.137.'));
+  // .env keeps the last hotspot's details after it's switched off; don't send phones to a network that isn't there.
   return {
-    ssid: env.HOTSPOT_SSID || '',
-    password: env.HOTSPOT_PASSWORD || '',
-    band: env.HOTSPOT_BAND || '',
-    hotspot: urls.some((u) => u.includes('192.168.137.')),
+    ssid: hotspot ? env.HOTSPOT_SSID || '' : '',
+    password: hotspot ? env.HOTSPOT_PASSWORD || '' : '',
+    band: hotspot ? env.HOTSPOT_BAND || '' : '',
+    hotspot,
     studentUrl: `${urls[0] || `http://localhost:${PORT}`}/`,
     urls,
   };
