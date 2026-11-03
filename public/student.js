@@ -4,11 +4,9 @@
 
   const T = {
     en: {
-      exit: 'Quick exit', eyebrow: 'Anonymous · Safe · Heard', h1a: 'Say what', h1b: 'happened.',
-      lede: 'Tell us about bullying, harassment or anything that makes school feel unsafe. A counsellor reads every report and replies.',
+      exit: 'Quick exit', h1a: 'Say what', h1b: 'happened.',
+      lede: 'A counsellor reads every report and replies.',
       btnReport: 'Report something', btnCheck: 'Check your case', btnHelp: 'I need help right now',
-      p1a: 'No name.', p1b: 'We never ask who you are.', p2a: 'No login.', p2b: 'Just a private case code.',
-      p3a: 'Deleted on schedule.', p3b: 'Reports are not kept forever.',
       privacy: 'No name · No login · No IP logged', newReport: 'New report', anonymous: 'Anonymous',
       whatHappened: 'What happened?', placeholder: "Write it in your own words. You don't need to give any names.",
       speak: 'Speak', listening: 'Listening…', where: 'Where?', when: 'When?', helpNowToggle: 'I need help right now',
@@ -28,11 +26,9 @@
       hl: { 'Tele-MANAS': 'Free mental health support, 24×7', Childline: 'Free helpline for children, 24×7', Emergency: 'If you are in immediate danger' },
     },
     ta: {
-      exit: 'வெளியேறு', eyebrow: 'அநாமதேயம் · பாதுகாப்பு · கேட்கப்படும்', h1a: 'என்ன நடந்தது', h1b: 'சொல்லுங்கள்.',
-      lede: 'கேலி, துன்புறுத்தல் அல்லது பள்ளியில் பாதுகாப்பற்றதாக உணர வைக்கும் எதையும் எங்களிடம் சொல்லுங்கள். ஒவ்வொரு புகாரையும் ஒரு ஆலோசகர் படித்து பதிலளிப்பார்.',
+      exit: 'வெளியேறு', h1a: 'என்ன நடந்தது', h1b: 'சொல்லுங்கள்.',
+      lede: 'ஒவ்வொரு புகாரையும் ஒரு ஆலோசகர் படித்து பதிலளிப்பார்.',
       btnReport: 'புகார் செய்ய', btnCheck: 'உங்கள் புகாரைப் பார்க்க', btnHelp: 'எனக்கு இப்போதே உதவி தேவை',
-      p1a: 'பெயர் இல்லை.', p1b: 'நீங்கள் யார் என்று நாங்கள் கேட்பதில்லை.', p2a: 'உள்நுழைவு இல்லை.', p2b: 'ஒரு ரகசிய குறியீடு மட்டும்.',
-      p3a: 'தானாக நீக்கப்படும்.', p3b: 'புகார்கள் நிரந்தரமாக வைக்கப்படுவதில்லை.',
       privacy: 'பெயர் இல்லை · உள்நுழைவு இல்லை · IP பதிவு இல்லை', newReport: 'புதிய புகார்', anonymous: 'அநாமதேயம்',
       whatHappened: 'என்ன நடந்தது?', placeholder: 'உங்கள் வார்த்தைகளில் எழுதுங்கள். யாருடைய பெயரும் தேவையில்லை.',
       speak: 'பேசுங்கள்', listening: 'கேட்கிறது…', where: 'எங்கே?', when: 'எப்போது?', helpNowToggle: 'எனக்கு இப்போதே உதவி தேவை',
@@ -75,13 +71,10 @@
   // Copy that tells students what happens to their words, that they are not in
   // trouble, and that they stay in control (trauma-informed: safety, trust, choice).
   Object.assign(T.en, {
-    reassure: "You won't get in trouble for telling. Reporting for a friend is okay too.",
-    howTitle: 'What happens next', how1: 'You write what happened. No name needed.',
-    how2: 'Only the school counsellor reads it.',
-    how3: 'You get a reply here with your private code, usually within one school day.',
+    reassure: "You won't get in trouble for telling.",
     about: 'Who is this about?', optional: 'optional',
     aboutOpts: { me: 'Me', friend: 'A friend', saw: 'Something I saw' },
-    noNames: 'No names needed. You can stop any time.', clear: 'Clear',
+    clear: 'Clear',
     helpNowHint: 'A counsellor is alerted straight away.',
     whoSees: 'Who can see this?',
     whoSeesBody: "Only your school counsellor. We don't store your name, phone number or IP address, and reports are deleted on a schedule.",
@@ -89,19 +82,16 @@
     breatheTitle: 'Take a slow breath with me', breatheStart: 'Start breathing', breatheStop: 'Stop',
     breatheIn: 'Breathe in…', breatheHold: 'Hold…', breatheOut: 'Breathe out…',
     apkLink: 'Or download the Android app',
-    weDidTitle: 'You said, we did', weDidSub: 'Changes the school made because students spoke up.',
+    weDidTitle: 'You said, we did',
     feelQ: 'Do you feel safer now?', feelYes: 'Yes', feelSome: 'A bit', feelNo: 'Not yet',
     feelThanks: 'Thank you. This helps the school know what works.',
     feelNoThanks: 'Thank you for telling us. Your case is open again and a counsellor will follow up.',
   });
   Object.assign(T.ta, {
-    reassure: 'சொன்னதற்காக நீங்கள் சிக்கலில் மாட்ட மாட்டீர்கள். நண்பருக்காகப் புகார் செய்வதும் சரியே.',
-    howTitle: 'அடுத்து என்ன நடக்கும்', how1: 'என்ன நடந்தது என்று எழுதுங்கள். பெயர் தேவையில்லை.',
-    how2: 'பள்ளி ஆலோசகர் மட்டுமே இதைப் படிப்பார்.',
-    how3: 'உங்கள் ரகசிய குறியீட்டுடன் இங்கே பதில் கிடைக்கும், பெரும்பாலும் ஒரு பள்ளி நாளுக்குள்.',
+    reassure: 'சொன்னதற்காக நீங்கள் சிக்கலில் மாட்ட மாட்டீர்கள்.',
     about: 'இது யாரைப் பற்றியது?', optional: 'விருப்பம்',
     aboutOpts: { me: 'நான்', friend: 'ஒரு நண்பர்', saw: 'நான் பார்த்தது' },
-    noNames: 'பெயர்கள் தேவையில்லை. எப்போது வேண்டுமானாலும் நிறுத்தலாம்.', clear: 'அழி',
+    clear: 'அழி',
     helpNowHint: 'உடனே ஒரு ஆலோசகருக்குத் தெரிவிக்கப்படும்.',
     whoSees: 'இதை யார் பார்க்க முடியும்?',
     whoSeesBody: 'உங்கள் பள்ளி ஆலோசகர் மட்டுமே. உங்கள் பெயர், தொலைபேசி எண் அல்லது IP முகவரியை நாங்கள் சேமிப்பதில்லை. புகார்கள் குறிப்பிட்ட காலத்தில் நீக்கப்படும்.',
@@ -109,7 +99,7 @@
     breatheTitle: 'என்னுடன் மெதுவாக மூச்சு விடுங்கள்', breatheStart: 'மூச்சுப் பயிற்சி தொடங்கு', breatheStop: 'நிறுத்து',
     breatheIn: 'மூச்சை உள்ளிழுங்கள்…', breatheHold: 'நிறுத்துங்கள்…', breatheOut: 'மூச்சை வெளியே விடுங்கள்…',
     apkLink: 'அல்லது Android செயலியைப் பதிவிறக்குங்கள்',
-    weDidTitle: 'நீங்கள் சொன்னீர்கள், நாங்கள் செய்தோம்', weDidSub: 'மாணவர்கள் பேசியதால் பள்ளி செய்த மாற்றங்கள்.',
+    weDidTitle: 'நீங்கள் சொன்னீர்கள், நாங்கள் செய்தோம்',
     feelQ: 'இப்போது நீங்கள் பாதுகாப்பாக உணர்கிறீர்களா?', feelYes: 'ஆம்', feelSome: 'கொஞ்சம்', feelNo: 'இன்னும் இல்லை',
     feelThanks: 'நன்றி. எது பயனளிக்கிறது என்று பள்ளிக்குத் தெரிய இது உதவும்.',
     feelNoThanks: 'சொன்னதற்கு நன்றி. உங்கள் வழக்கு மீண்டும் திறக்கப்பட்டது, ஒரு ஆலோசகர் தொடர்புகொள்வார்.',
@@ -516,9 +506,9 @@
   }));
 
   function renderWeDid() {
-    const list = (info.notices || []).slice(0, 3);
+    const list = (info.notices || []).slice(0, 1);
     $('#weDid').hidden = !list.length;
-    $('#weDidList').innerHTML = list.map((n) => `<li><b>${esc(n.title)}</b><span>${esc(n.body)}</span></li>`).join('');
+    $('#weDidList').innerHTML = list.map((n) => `<li><span>${esc(n.body)}</span></li>`).join('');
   }
 
   $('#msgForm').addEventListener('submit', async (e) => {
