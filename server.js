@@ -166,15 +166,20 @@ const studentView = (c) => ({
   messages: c.messages.map(({ from, text, at }) => ({ from, text, at })),
 });
 
+// Phones can't reach a laptop through its VPN or virtual adapters (e.g. Proton VPN's "ProTUN").
+const VIRTUAL_ADAPTER = /vpn|tun|tap|wireguard|tailscale|zerotier|vethernet|virtualbox|vmware|docker|wsl/i;
+
 function lanUrls() {
   const out = [];
-  for (const list of Object.values(os.networkInterfaces())) {
+  for (const [name, list] of Object.entries(os.networkInterfaces())) {
     for (const a of list || []) {
-      if (a.family === 'IPv4' && !a.internal && !a.address.startsWith('169.254')) out.push(`http://${a.address}:${PORT}`);
+      if (a.family !== 'IPv4' || a.internal || a.address.startsWith('169.254')) continue;
+      // Windows Mobile Hotspot always hosts on 192.168.137.1: list it first when it's up.
+      const rank = a.address.startsWith('192.168.137.') ? 0 : VIRTUAL_ADAPTER.test(name) ? 2 : 1;
+      out.push({ url: `http://${a.address}:${PORT}`, rank });
     }
   }
-  // Windows Mobile Hotspot always hosts on 192.168.137.1: list it first when it's up.
-  return out.sort((a, b) => b.includes('192.168.137.') - a.includes('192.168.137.'));
+  return out.sort((a, b) => a.rank - b.rank).map((u) => u.url);
 }
 
 // Wi-Fi details written by network/hotspot.ps1. Re-read on each request so a
