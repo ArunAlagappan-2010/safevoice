@@ -44,7 +44,10 @@ if (-not $Ssid) { $Ssid = 'SafeVoice' }
 if (-not $Password) { $Password = Read-EnvValue 'HOTSPOT_PASSWORD' }
 if (-not $Password) { $Password = 'safevoice2026' }
 if ($Password.Length -lt 8) { throw 'Wi-Fi password must be at least 8 characters.' }
-if (-not $Range) { $Range = Read-EnvValue 'HOTSPOT_RANGE' }
+if (-not $Range) {
+  $savedRange = Read-EnvValue 'HOTSPOT_RANGE'
+  if ($savedRange) { $Range = $savedRange }
+}
 if (-not $Range) { $Range = 'long' }
 
 # ---------- firewall: allow phones on the local network to reach the app ----------
