@@ -13,8 +13,8 @@
     .grow { flex: 1; }
     .ghost { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 6px 12px; font-size: 13px; font-weight: 600; }
     .stage { flex: 1; display: flex; flex-direction: column; padding: 20px 28px 16px; min-height: 0; }
-    .dash { border-radius: 20px; overflow: hidden; min-height: 560px; flex: 1; }
-    .dash iframe { width: 100%; height: 100%; border: 0; display: block; }
+    .dash { position: relative; border-radius: 20px; overflow: hidden; min-height: 560px; flex: 1; }
+    .dash iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
     .foot { margin: 0 28px 12px; text-align: right; font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
   </style>
 </head>
