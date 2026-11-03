@@ -37,40 +37,20 @@
     <!-- HOME -->
     <section class="screen" data-screen="home">
       <div class="hero">
-        <p class="eyebrow muted" data-t="eyebrow">Anonymous · Safe · Heard</p>
-        <h1 class="serif"><span data-t="h1a">Say what</span><br><span class="accent" data-t="h1b">happened.</span></h1>
-        <p class="lede" data-t="lede">Tell us about bullying, harassment or anything that makes school feel unsafe. A counsellor reads every report and replies.</p>
+        <h1 class="serif"><span data-t="h1a">Say what</span> <span data-t="h1b">happened.</span></h1>
+        <p class="lede" data-t="lede">A counsellor reads every report and replies.</p>
       </div>
-      <p class="reassure">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.4-7-10.2A4.3 4.3 0 0 1 12 8a4.3 4.3 0 0 1 7 2.8C19 16.6 12 21 12 21Z" fill="currentColor"/></svg>
-        <span data-t="reassure">You won't get in trouble for telling. Reporting for a friend is okay too.</span>
-      </p>
       <div class="stack">
         <button class="btn primary big" data-go="report" data-t="btnReport">Report something</button>
         <button class="btn soft big" data-go="check" data-t="btnCheck">Check your case</button>
         <button class="btn calm big" data-go="help" data-t="btnHelp">I need help right now</button>
       </div>
-
-      <div class="how">
-        <p class="eyebrow muted" data-t="howTitle">What happens next</p>
-        <ol>
-          <li><i>1</i><span data-t="how1">You write what happened. No name needed.</span></li>
-          <li><i>2</i><span data-t="how2">Only the school counsellor reads it.</span></li>
-          <li><i>3</i><span data-t="how3">You get a reply here with your private code, usually within one school day.</span></li>
-        </ol>
-      </div>
+      <p class="reassure" data-t="reassure">You won't get in trouble for telling.</p>
 
       <div class="wedid" id="weDid" hidden>
         <p class="eyebrow muted" data-t="weDidTitle">You said, we did</p>
-        <p class="wedid-sub" data-t="weDidSub">Changes the school made because students spoke up.</p>
         <ul id="weDidList"></ul>
       </div>
-
-      <ul class="promises">
-        <li><span class="ico teal"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 8a7 7 0 0 1 14 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M4 4l16 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><div><b data-t="p1a">No name.</b> <span data-t="p1b">We never ask who you are.</span></div></li>
-        <li><span class="ico lav"><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/></svg></span><div><b data-t="p2a">No login.</b> <span data-t="p2b">Just a private case code.</span></div></li>
-        <li><span class="ico sky"><svg viewBox="0 0 24 24"><path d="M5 7h14M10 7V5h4v2M7 7l1 13h8l1-13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><b data-t="p3a">Deleted on schedule.</b> <span data-t="p3b">Reports are not kept forever.</span></div></li>
-      </ul>
 
       <div class="install" id="installCard" hidden>
         <div>
@@ -116,7 +96,6 @@
             <span id="micLabel" data-t="speak">Speak</span>
           </button>
         </div>
-        <p class="field-hint" data-t="noNames">No names needed. You can stop any time.</p>
 
         <p class="label eyebrow"><span data-t="where">Where?</span> <small data-t="optional">optional</small></p>
         <div class="chips" id="whereChips" role="radiogroup"></div>
@@ -161,7 +140,6 @@
         <button class="btn soft" data-go="thread" data-t="openCase">Open my case</button>
         <button class="btn link" data-go="home" data-t="done">Done</button>
       </div>
-      <p class="pill-note" data-t="privacy">No name · No login · No IP logged</p>
     </section>
 
     <!-- HELP -->
