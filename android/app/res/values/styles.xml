@@ -8,6 +8,6 @@
         <item name="android:colorPrimary">@color/teal</item>
         <item name="android:colorPrimaryDark">@color/mist</item>
     </style>
-    <color name="mist">#F3F6F4</color>
-    <color name="teal">#2A7C76</color>
+    <color name="mist">#F5F6F7</color>
+    <color name="teal">#2B2E33</color>
 </resources>

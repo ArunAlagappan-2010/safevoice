@@ -1,6 +1,6 @@
 // QR helpers on top of the bundled qrcode-generator (works with no internet).
 (() => {
-  function renderQR(el, text, { size = 140, dark = '#1f3340', light = '#ffffff' } = {}) {
+  function renderQR(el, text, { size = 140, dark = '#1c1e21', light = '#ffffff' } = {}) {
     if (!el || !window.qrcode) return;
     const qr = window.qrcode(0, 'M');
     qr.addData(text, 'Byte');
